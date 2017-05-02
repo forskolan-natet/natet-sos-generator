@@ -7,22 +7,27 @@ from .models.day import Day
 # If you/your family is not present in the last 9 positions you will not have two SoS in the same week.
 DEFAULT_HOLY_PERIOD_LENGTH = 9
 
-NUMBER_OF_TRIES_TO_GENERATE = 10
+SPONSOR_DEFAULT_HOLY_PERIOD_LENGTH = 47
+
+NUMBER_OF_RETRIES = 100
 
 
 class Generator:
+    pot = []
+    sos_list = []
+    sos_days = []
 
-    def __init__(self, members, holy_period_length=DEFAULT_HOLY_PERIOD_LENGTH):
-        self.members = members
-        self.pot = []
-        self.sos_list = []
+    def __init__(self, members, holy_period_length=DEFAULT_HOLY_PERIOD_LENGTH,
+                 sponsor_holy_period_length=SPONSOR_DEFAULT_HOLY_PERIOD_LENGTH):
         self.holy_period_length = holy_period_length
-        self.sos_days = []
+        self.sponsor_holy_period_length = sponsor_holy_period_length
+        self.members = members
         self.number_of_retries_done = 0
 
-        #self.__populate_pot()
-
     def _populate_pot(self):
+        self.pot = []
+        self.sos_list = []
+        self.sos_days = []
         for member in self.members:
             if member.proportion == 100:
                 self.pot.extend([member, member])
@@ -30,7 +35,7 @@ class Generator:
                 self.pot.append(member)
 
     def generate(self):
-        for x in range(0, NUMBER_OF_TRIES_TO_GENERATE):
+        while self.number_of_retries_done < NUMBER_OF_RETRIES:
             try:
                 self._populate_pot()
                 self.__generate()
@@ -75,8 +80,9 @@ class Generator:
             if next_member is None:
                 next_member = random.choice(good_pot)
 
-            if self.is_member_already_in_holy_period(next_member) \
-                    or self.is_members_family_in_holy_period(next_member):
+            if self.is_members_family_in_holy_period(next_member) \
+                    or self.is_sponsored_and_sponsor_is_in_pot(next_member) \
+                    or self.is_sponsors_family_in_sponsor_holy_period_length(next_member):
                 good_pot.remove(next_member)
                 bad_pot.append(next_member)
                 continue
@@ -92,14 +98,32 @@ class Generator:
         holy_period_start = 0 if holy_period_start < 0 else holy_period_start
         return self.sos_list[holy_period_start:]
 
-    def is_member_already_in_holy_period(self, member):
-        holy_period_mebers = self._get_holy_period_members()
-        return holy_period_mebers.count(member) > 0
-
     def is_members_family_in_holy_period(self, member):
         holy_period_mebers = self._get_holy_period_members()
         for o in self.members:
             if o.family == member.family:
                 if o in holy_period_mebers:
                     return True
+        return False
+
+    def _get_sponsor_holy_period_members(self):
+        length = len(self.sos_list)
+        holy_period_start = length - self.sponsor_holy_period_length
+        holy_period_start = 0 if holy_period_start < 0 else holy_period_start
+        return self.sos_list[holy_period_start:]
+
+    def is_sponsors_family_in_sponsor_holy_period_length(self, member):
+        if not member.is_sponsor:
+            return False
+
+        sponsor_holy_period_mebers = self._get_sponsor_holy_period_members()
+        for o in self.members:
+            if o.family == member.family:
+                if o in sponsor_holy_period_mebers:
+                    return True
+        return False
+
+    def is_sponsored_and_sponsor_is_in_pot(self, member):
+        if member.is_sponsored and [x for x in self.pot if x.sponsor_for_family == member.family]:
+            return True
         return False

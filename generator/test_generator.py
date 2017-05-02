@@ -42,10 +42,11 @@ class TestGenerator(TestCase):
 
     # Förmodligen obsolet?
     def test_member_not_allowed_more_than_once_in_holy_period(self):
-        m = Member()
-        generator = Generator([m])
-        generator.sos_list.append(m)
-        self.assertTrue(generator.is_member_already_in_holy_period(m))
+        m1 = Member(proportion=100, family=1)
+        m2 = Member(proportion=50, family=2)
+        generator = Generator([m1, m2], holy_period_length=1)
+        generator.generate()
+        self.assertListEqual(generator.sos_list, [m1, m2, m1])
 
     def test_members_family_not_allowed_more_than_once_in_holy_period(self):
         m1 = Member(family=1)
@@ -60,7 +61,7 @@ class TestGenerator(TestCase):
 
         members = self._large_list_of_members()
         members.extend([sponsor, sponsored])
-        generator = Generator(members)
+        generator = Generator(members, sponsor_holy_period_length=0)
 
         generator.generate()
         sos_days = generator.sos_days
@@ -77,7 +78,7 @@ class TestGenerator(TestCase):
 
         members = self._large_list_of_members()
         members.extend([sponsor, sponsored])
-        generator = Generator(members)
+        generator = Generator(members, sponsor_holy_period_length=0)
 
         generator.generate()
         self.assertEqual(generator.sos_list.index(sponsor) % 2, 0)
@@ -88,7 +89,7 @@ class TestGenerator(TestCase):
         generator = Generator([m1, m2])
         with self.assertRaises(NotPossibleToGenerateSosError):
             generator.generate()
-        self.assertEqual(generator.number_of_retries_done, 10)
+        self.assertEqual(generator.number_of_retries_done, 100)
 
     def test_sponsors_are_always_picked_first(self):
         sponsor = Member(first_name="sponsor", proportion=50, family=100, sponsor_for_family=200)
@@ -101,6 +102,40 @@ class TestGenerator(TestCase):
         first_day = generator.sos_days[0]
         self.assertTrue(sponsor in first_day.members)
         self.assertTrue(sponsored in first_day.members)
+
+    def test_sponsor_is_picked_direct_after_holy_period(self):
+        sponsor = Member(first_name="sponsor", proportion=100, family=100, sponsor_for_family=200)
+        sponsored = Member(first_name="sponsored", proportion=100, family=200, sponsorde_by_family=100)
+
+        days_period = 10
+        sponsor_holy_period_length = days_period * 2 - 2
+
+        members = self._large_list_of_members()
+        members.extend([sponsor, sponsored])
+        generator = Generator(members, sponsor_holy_period_length=sponsor_holy_period_length)
+        generator.generate()
+
+        first_day = generator.sos_days[0]
+        self.assertTrue(sponsor in first_day.members)
+        self.assertTrue(sponsored in first_day.members)
+
+        day_after_sponsor_holy_period = generator.sos_days[days_period]
+        self.assertTrue(sponsor in day_after_sponsor_holy_period.members)
+        self.assertTrue(sponsored in day_after_sponsor_holy_period.members)
+
+    def test_sponsored_with_higher_proportion_than_sponsor_still_gets_sos(self):
+        sponsor1 = Member(proportion=50, family=100, sponsor_for_family=200)
+        sponsor2 = Member(proportion=50, family=100, sponsor_for_family=200)
+        sponsored1 = Member(proportion=100, family=200, sponsorde_by_family=100)
+        sponsored2 = Member(proportion=100, family=200, sponsorde_by_family=100)
+
+        members = [sponsor1, sponsor2, sponsored1, sponsored2]
+        generator = Generator(members, sponsor_holy_period_length=0, holy_period_length=0)
+        generator.generate()
+        self.assertEqual(generator.sos_list.count(sponsor1), 1)
+        self.assertEqual(generator.sos_list.count(sponsor2), 1)
+        self.assertEqual(generator.sos_list.count(sponsored1), 2)
+        self.assertEqual(generator.sos_list.count(sponsored2), 2)
 
     @staticmethod
     def _large_list_of_members():
