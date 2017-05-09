@@ -3,13 +3,13 @@ import random
 from .exceptions import DeadlockInGenerationError, NotPossibleToGenerateSosError
 from .models.day import Day
 
-# Why 9? A regular week has 5 days á 2 SoS members.
-# If you/your family is not present in the last 9 positions you will not have two SoS in the same week.
-DEFAULT_HOLY_PERIOD_LENGTH = 9
+# Why 25? A regular week has 5 days á 2 SoS members.
+# If you/your family is not present in the last 25 positions you will have at least 13 days between SoS.
+DEFAULT_HOLY_PERIOD_LENGTH = 25
 
 SPONSOR_DEFAULT_HOLY_PERIOD_LENGTH = 47
 
-NUMBER_OF_RETRIES = 100
+NUMBER_OF_RETRIES = 1000
 
 
 class Generator:
@@ -29,9 +29,9 @@ class Generator:
         self.sos_list = []
         self.sos_days = []
         for member in self.members:
-            if member.proportion == 100:
+            if member.sos_percentage == 100:
                 self.pot.extend([member, member])
-            elif member.proportion == 50:
+            elif member.sos_percentage == 50:
                 self.pot.append(member)
 
     def generate(self):
@@ -46,10 +46,7 @@ class Generator:
 
     def __generate(self):
         while self.pot:
-            member = self.get_next_member_from_pot()
-            if member is None:
-                raise DeadlockInGenerationError
-
+            member = self.__get_next_member_from_pot()
             self.__move_from_pot_to_sos_list(member)
 
             if member.is_sponsor:
@@ -66,13 +63,13 @@ class Generator:
         self.pot.remove(member)
         self.sos_list.append(member)
 
-    def get_next_member_from_pot(self):
+    def __get_next_member_from_pot(self):
         good_pot = list(self.pot)
         bad_pot = []
         while good_pot:
             next_member = None
 
-            if self._is_new_day():
+            if self.__is_new_day():
                 sponsors = [x for x in good_pot if x.is_sponsor]
                 if sponsors:
                     next_member = sponsors[0]
@@ -80,25 +77,28 @@ class Generator:
             if next_member is None:
                 next_member = random.choice(good_pot)
 
-            if self.is_members_family_in_holy_period(next_member) \
-                    or self.is_sponsored_and_sponsor_is_in_pot(next_member) \
-                    or self.is_sponsors_family_in_sponsor_holy_period_length(next_member):
+            if self._is_members_family_in_holy_period(next_member) \
+                    or self._is_sponsored_and_sponsor_is_in_pot(next_member) \
+                    or self._is_sponsors_family_in_sponsor_holy_period_length(next_member):
                 good_pot.remove(next_member)
                 bad_pot.append(next_member)
                 continue
 
             return next_member
 
-    def _is_new_day(self):
+        raise DeadlockInGenerationError
+
+    def __is_new_day(self):
         return len(self.sos_list) % 2 == 0
 
     def _get_holy_period_members(self):
         length = len(self.sos_list)
-        holy_period_start = length - self.holy_period_length
-        holy_period_start = 0 if holy_period_start < 0 else holy_period_start
+        holy_period_start = \
+            0 if length < self.holy_period_length \
+            else length - self.holy_period_length
         return self.sos_list[holy_period_start:]
 
-    def is_members_family_in_holy_period(self, member):
+    def _is_members_family_in_holy_period(self, member):
         holy_period_mebers = self._get_holy_period_members()
         for o in self.members:
             if o.family == member.family:
@@ -112,7 +112,7 @@ class Generator:
         holy_period_start = 0 if holy_period_start < 0 else holy_period_start
         return self.sos_list[holy_period_start:]
 
-    def is_sponsors_family_in_sponsor_holy_period_length(self, member):
+    def _is_sponsors_family_in_sponsor_holy_period_length(self, member):
         if not member.is_sponsor:
             return False
 
@@ -123,7 +123,7 @@ class Generator:
                     return True
         return False
 
-    def is_sponsored_and_sponsor_is_in_pot(self, member):
+    def _is_sponsored_and_sponsor_is_in_pot(self, member):
         if member.is_sponsored and [x for x in self.pot if x.sponsor_for_family == member.family]:
             return True
         return False

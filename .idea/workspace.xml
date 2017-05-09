@@ -3,11 +3,17 @@
   <component name="AutoTestManager">
     <enabled-run-configurations>
       <run-configuration type="tests" name="Unittests in natet-sos" />
+      <run-configuration type="tests" name="Unittests in TestGenerator" />
     </enabled-run-configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74cd67cc-6b92-4b6a-9add-a110cfb693fc" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generator/integration/database.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generator/integration/test_workdays.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generator/integration/workdays.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generator/generator.py" afterPath="$PROJECT_DIR$/generator/generator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generator/models/day.py" afterPath="$PROJECT_DIR$/generator/models/day.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generator/models/member.py" afterPath="$PROJECT_DIR$/generator/models/member.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generator/test_generator.py" afterPath="$PROJECT_DIR$/generator/test_generator.py" />
     </list>
@@ -28,19 +34,51 @@
         <entry file="file://$PROJECT_DIR$/todo.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="generator.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generator/generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1275">
-              <caret line="85" column="44" lean-forward="true" selection-start-line="85" selection-start-column="44" selection-end-line="85" selection-end-column="44" />
+            <state relative-caret-position="405">
+              <caret line="27" column="21" lean-forward="true" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="workdays.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generator/integration/workdays.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="32" lean-forward="true" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_workdays.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generator/integration/test_workdays.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="24" column="39" lean-forward="true" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="database.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generator/integration/database.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="25" column="36" lean-forward="true" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,8 +87,8 @@
       <file leaf-file-name="test_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generator/test_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="127" column="76" lean-forward="true" selection-start-line="127" selection-start-column="76" selection-end-line="127" selection-end-column="76" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="29" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -58,21 +96,33 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_member.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generator/test_member.py">
+      <file leaf-file-name="runner.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/runner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="270">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#42#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/Cellar/python3/3.6.0_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/unittest/case.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="1207" column="8" lean-forward="false" selection-start-line="1207" selection-start-column="8" selection-end-line="1207" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generator/integration/__init__.py">
+      <file leaf-file-name="day.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generator/models/day.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
+            <state relative-caret-position="120">
+              <caret line="8" column="30" lean-forward="true" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -94,6 +144,10 @@
       <find>.sos_list</find>
       <find>day_after_sponsor_holy_period</find>
       <find>enu</find>
+      <find>proportion</find>
+      <find>holy_period_length</find>
+      <find>__get_next_member_from_pot</find>
+      <find>cederstr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -118,45 +172,30 @@
         <option value="$PROJECT_DIR$/generator/member.py" />
         <option value="$PROJECT_DIR$/generator/models/departments.py" />
         <option value="$PROJECT_DIR$/bla.txt" />
-        <option value="$PROJECT_DIR$/generator/models/day.py" />
         <option value="$PROJECT_DIR$/generator/exceptions.py" />
         <option value="$PROJECT_DIR$/todo.txt" />
+        <option value="$PROJECT_DIR$/generator/integration/calendar.py" />
+        <option value="$PROJECT_DIR$/generator/integration/test_calendar.py" />
+        <option value="$PROJECT_DIR$/generator/integration/database.py" />
         <option value="$PROJECT_DIR$/generator/models/member.py" />
+        <option value="$PROJECT_DIR$/generator/models/day.py" />
         <option value="$PROJECT_DIR$/generator/test_generator.py" />
         <option value="$PROJECT_DIR$/generator/generator.py" />
+        <option value="$PROJECT_DIR$/generator/integration/test_workdays.py" />
+        <option value="$PROJECT_DIR$/generator/integration/workdays.py" />
+        <option value="$PROJECT_DIR$/runner.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="52" />
-    <option name="y" value="43" />
-    <option name="width" value="1378" />
-    <option name="height" value="837" />
+    <option name="x" value="-1663" />
+    <option name="y" value="-245" />
+    <option name="width" value="1390" />
+    <option name="height" value="822" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>BashSupport</id>
-          </State>
-          <State>
-            <id>Internationalization issues</id>
-          </State>
-          <State>
-            <id>Python</id>
-          </State>
-          <State>
-            <id>RELAX NG</id>
-          </State>
-          <State>
-            <id>Spelling</id>
-          </State>
-        </expanded-state>
-      </profile-state>
+      <profile-state />
     </entry>
   </component>
   <component name="ProjectView">
@@ -174,24 +213,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="natet-sos-generator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="&lt; Python 3.6.0 virtualenv at ~/.virtualenvs/sos &gt;" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="natet-sos-generator" />
@@ -234,16 +257,33 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="natet-sos-generator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="natet-sos-generator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="generator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-  </component>
-  <component name="PyDebuggerOptionsProvider">
-    <option name="mySaveCallSignatures" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -253,51 +293,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in natet-sos">
-    <configuration default="false" name="Unittest TestStringMethods.test_isupper" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sos/generator/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="natet-sos" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sos/generator/test/test_generator.py" />
-      <option name="CLASS_NAME" value="TestStringMethods" />
-      <option name="METHOD_NAME" value="test_isupper" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Unittests in TestStringMethods" type="tests" factoryName="Unittests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="natet-sos" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_generator.py" />
-      <option name="CLASS_NAME" value="TestStringMethods" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_CLASS" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.runner">
     <configuration default="false" name="Unittests in natet-sos" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -313,6 +309,84 @@
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="$PROJECT_DIR$" />
       <option name="TEST_TYPE" value="TEST_FOLDER" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="runner" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="natet-sos" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/runner.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="generator" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/generator" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="natet-sos" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generator/generator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittest TestGenerator.test_get_x_number_of_days_from_today" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/generator/integration" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="natet-sos" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generator/integration/test_workdays.py" />
+      <option name="CLASS_NAME" value="TestGenerator" />
+      <option name="METHOD_NAME" value="test_get_x_number_of_days_from_today" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittests in TestGenerator" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/generator/integration" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="natet-sos" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generator/integration/test_workdays.py" />
+      <option name="CLASS_NAME" value="TestGenerator" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_CLASS" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PUREUNITTEST" value="true" />
@@ -465,16 +539,20 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="3">
-      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_isupper" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in TestStringMethods" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in natet-sos" />
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in natet-sos" />
+      <item index="1" class="java.lang.String" itemvalue="Python.runner" />
+      <item index="2" class="java.lang.String" itemvalue="Python.generator" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestGenerator.test_get_x_number_of_days_from_today" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in TestGenerator" />
     </list>
     <recent_temporary>
-      <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in natet-sos" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in TestStringMethods" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_isupper" />
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python.runner" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in TestGenerator" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestGenerator.test_get_x_number_of_days_from_today" />
+        <item index="3" class="java.lang.String" itemvalue="Python.generator" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in natet-sos" />
       </list>
     </recent_temporary>
   </component>
@@ -495,57 +573,57 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 18m 06s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittest_TestGenerator_test_get_x_number_of_days_from_today - 2017.05.09 at 02h 24m 57s.xml">
+      <configuration name="Unittest TestGenerator.test_get_x_number_of_days_from_today" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 18m 27s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittest_TestGenerator_test_get_x_number_of_days_from_today - 2017.05.09 at 02h 25m 02s.xml">
+      <configuration name="Unittest TestGenerator.test_get_x_number_of_days_from_today" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 18m 34s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittest_TestGenerator_test_get_x_number_of_days_from_today - 2017.05.09 at 02h 25m 07s.xml">
+      <configuration name="Unittest TestGenerator.test_get_x_number_of_days_from_today" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 18m 42s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 29m 16s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 19m 32s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 29m 32s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 19m 36s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 29m 44s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 19m 38s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 29m 52s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 19m 40s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 30m 07s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 19m 41s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 30m 25s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_natet-sos - 2017.05.02 at 03h 19m 42s.xml">
-      <configuration name="Unittests in natet-sos" configurationId="tests" />
+    <history-entry file="Unittests_in_TestGenerator - 2017.05.09 at 02h 30m 39s.xml">
+      <configuration name="Unittests in TestGenerator" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="52" y="43" width="1378" height="837" extended-state="0" />
+    <frame x="-1663" y="-245" width="1390" height="822" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963716" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2294964" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27864584" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934928" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27755645" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997344" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294271" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -553,10 +631,29 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="6" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/generator/generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="39" lean-forward="false" selection-start-line="9" selection-start-column="39" selection-end-line="9" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/todo.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -614,7 +711,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -632,7 +728,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="53" lean-forward="false" selection-start-line="12" selection-start-column="53" selection-end-line="12" selection-end-column="53" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -723,41 +818,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generator/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="24" lean-forward="false" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/generator/integration/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generator/test_member.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_generator.py" />
     <entry file="file://$PROJECT_DIR$/bla.txt" />
     <entry file="file://$PROJECT_DIR$/generator/models/department.py" />
-    <entry file="file://$PROJECT_DIR$/generator/models/day.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="23" lean-forward="true" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/generator/exceptions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -768,35 +832,111 @@
     <entry file="file://$PROJECT_DIR$/todo.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="24" lean-forward="true" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/integration/database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="25" column="36" lean-forward="true" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/test_member.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="11" column="49" lean-forward="true" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/generator/models/member.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state relative-caret-position="135">
+          <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/integration/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/models/day.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="30" lean-forward="true" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/generator/test_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="127" column="76" lean-forward="true" selection-start-line="127" selection-start-column="76" selection-end-line="127" selection-end-column="76" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="29" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/Cellar/python3/3.6.0_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="1207" column="8" lean-forward="false" selection-start-line="1207" selection-start-column="8" selection-end-line="1207" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/generator/generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="85" column="44" lean-forward="true" selection-start-line="85" selection-start-column="44" selection-end-line="85" selection-end-column="44" />
+        <state relative-caret-position="405">
+          <caret line="27" column="21" lean-forward="true" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/integration/test_workdays.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="24" column="39" lean-forward="true" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/integration/workdays.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="32" lean-forward="true" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
           </folding>
         </state>
       </provider>

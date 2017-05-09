@@ -8,3 +8,6 @@ class Day:
         self.members = members
         self.tallen = self.members[0]
         self.granen = self.members[1]
+
+    def __repr__(self):
+        return "<T: %s, G: %s>" % (self.tallen.name, self.granen.name)

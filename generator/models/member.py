@@ -1,14 +1,15 @@
 class Member:
     id = 0
 
-    def __init__(self, first_name="", last_name="", proportion=100, family=0, sponsor_for_family=None,
-                 sponsorde_by_family=None):
+    def __init__(self, id=None, first_name="", last_name="", sos_percentage=100, family=0, sponsor_for_family=None,
+                 sponsored_by_family=None):
+        self.id = id
         self.first_name = first_name
         self.last_name = last_name
-        self.proportion = proportion
+        self.sos_percentage = sos_percentage
         self.family = family
         self.sponsor_for_family = sponsor_for_family
-        self.sponsorde_by_family = sponsorde_by_family
+        self.sponsored_by_family = sponsored_by_family
 
     @property
     def name(self):
@@ -20,6 +21,7 @@ class Member:
 
     @property
     def is_sponsored(self):
-        return self.sponsorde_by_family is not None
+        return self.sponsored_by_family is not None
 
-
+    def __repr__(self):
+        return "<%s %s (sos:%s)>" % (self.first_name, self.last_name, self.sos_percentage)
