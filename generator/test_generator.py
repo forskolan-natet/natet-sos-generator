@@ -112,7 +112,7 @@ class TestGenerator(TestCase):
 
         members = self._large_list_of_members()
         members.extend([sponsor, sponsored])
-        generator = Generator(members, sponsor_holy_period_length=sponsor_holy_period_length)
+        generator = Generator(members, holy_period_length=1, sponsor_holy_period_length=sponsor_holy_period_length)
         generator.generate()
 
         first_day = generator.sos_days[0]

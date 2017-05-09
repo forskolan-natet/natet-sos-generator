@@ -1,22 +1,23 @@
-import requests
+class WorkDays:
+    def __init__(self, start_after_date, closed_days_dao, dryg_dao):
+        start_year = start_after_date[:4]
+        self.last_fetched_year = int(start_year)
+        self.work_days = dryg_dao.get_days_for_year(start_year)
+        self.current_index = self.work_days.index(start_after_date)
+        self.closed_days = closed_days_dao.get_closed_days()
+        self.dryg_dao = dryg_dao
 
+    def next(self):
+        next_index = self.current_index + 1
+        while next_index >= len(self.work_days):
+            next_year = self.last_fetched_year + 1
+            self.work_days.extend(self.dryg_dao.get_days_for_year(next_year))
+            self.last_fetched_year = next_year
 
-def get_for_year(year):
-    response = requests.get("http://api.dryg.net/dagar/v2.1/%s" % year)
-    data = response.json()
-    workdays = [x["datum"] for x in data["dagar"] if x["arbetsfri dag"] == "Nej"]
-    return workdays
+        next_work_day = self.work_days[next_index]
+        self.current_index = next_index
 
+        if next_work_day in self.closed_days:
+            return self.next()
 
-def get_x_number_of_days_from_date(x, start_after_date):
-    start_year = start_after_date[:4]
-    work_days = get_for_year(start_year)
-
-    index_of_start_after_date = work_days.index(start_after_date)
-    work_days = work_days[index_of_start_after_date + 1:]
-
-    while x > len(work_days):
-        next_year = int(start_year) + 1
-        work_days.extend(get_for_year(next_year))
-
-    return work_days
+        return next_work_day
