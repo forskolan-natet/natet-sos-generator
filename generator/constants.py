@@ -1,0 +1,2 @@
+TALLEN_ID = 1
+GRANEN_ID = 2

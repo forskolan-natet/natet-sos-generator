@@ -2,6 +2,9 @@ import requests
 
 
 class DrygDAO:
+    def __init__(self):
+        pass
+
     def get_days_for_year(self, year):
         response = requests.get("http://api.dryg.net/dagar/v2.1/%s" % year)
         data = response.json()

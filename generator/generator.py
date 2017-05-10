@@ -1,33 +1,32 @@
 import random
 
 from .exceptions import DeadlockInGenerationError, NotPossibleToGenerateSosError
-from .models.day import Day
+from .model import DayList
+from .integration.workdays import WorkDaysService
 
-# Why 25? A regular week has 5 days á 2 SoS members.
-# If you/your family is not present in the last 25 positions you will have at least 13 days between SoS.
-DEFAULT_HOLY_PERIOD_LENGTH = 25
-
-SPONSOR_DEFAULT_HOLY_PERIOD_LENGTH = 47
-
+DEFAULT_HOLY_PERIOD_LENGTH = 10
+SPONSOR_DEFAULT_HOLY_PERIOD_LENGTH = 10
 NUMBER_OF_RETRIES = 1000
 
 
 class Generator:
     pot = []
-    sos_list = []
-    sos_days = []
+    sos_days = None
 
-    def __init__(self, members, holy_period_length=DEFAULT_HOLY_PERIOD_LENGTH,
+    def __init__(self, members, work_days_service: WorkDaysService,
+                 holy_period_length=DEFAULT_HOLY_PERIOD_LENGTH,
                  sponsor_holy_period_length=SPONSOR_DEFAULT_HOLY_PERIOD_LENGTH):
         self.holy_period_length = holy_period_length
         self.sponsor_holy_period_length = sponsor_holy_period_length
         self.members = members
         self.number_of_retries_done = 0
+        self.work_days_service = work_days_service
+        self._populate_pot()
 
     def _populate_pot(self):
         self.pot = []
-        self.sos_list = []
-        self.sos_days = []
+        self.work_days_service.reset()
+        self.sos_days = DayList(work_days_service=self.work_days_service)
         for member in self.members:
             if member.sos_percentage == 100:
                 self.pot.extend([member, member])
@@ -46,7 +45,7 @@ class Generator:
 
     def __generate(self):
         while self.pot:
-            member = self.__get_next_member_from_pot()
+            member = self._get_next_member_from_pot()
             self.__move_from_pot_to_sos_list(member)
 
             if member.is_sponsor:
@@ -56,14 +55,14 @@ class Generator:
                     first_sponsored_family_member = sponsored_family_members[0]
                     self.__move_from_pot_to_sos_list(first_sponsored_family_member)
 
-        for member1, member2 in zip(self.sos_list[0::2], self.sos_list[1::2]):
-            self.sos_days.append(Day([member1, member2]))
+        if not self.sos_days[-1].is_full:
+            self.sos_days.pop()
 
     def __move_from_pot_to_sos_list(self, member):
         self.pot.remove(member)
-        self.sos_list.append(member)
+        self.sos_days.append_member(member)
 
-    def __get_next_member_from_pot(self):
+    def _get_next_member_from_pot(self):
         good_pot = list(self.pot)
         bad_pot = []
         while good_pot:
@@ -89,38 +88,36 @@ class Generator:
         raise DeadlockInGenerationError
 
     def __is_new_day(self):
-        return len(self.sos_list) % 2 == 0
+        if self.sos_days:
+            return self.sos_days[-1].is_full
+        return True
 
-    def _get_holy_period_members(self):
-        length = len(self.sos_list)
+    def _get_holy_period(self):
+        length = len(self.sos_days)
         holy_period_start = \
             0 if length < self.holy_period_length \
             else length - self.holy_period_length
-        return self.sos_list[holy_period_start:]
+        return self.sos_days[holy_period_start:]
 
     def _is_members_family_in_holy_period(self, member):
-        holy_period_mebers = self._get_holy_period_members()
-        for o in self.members:
-            if o.family == member.family:
-                if o in holy_period_mebers:
-                    return True
-        return False
+        return self.is_member_in_period(member, self._get_holy_period())
 
-    def _get_sponsor_holy_period_members(self):
-        length = len(self.sos_list)
+    def _get_sponsor_holy_period(self):
+        length = len(self.sos_days)
         holy_period_start = length - self.sponsor_holy_period_length
         holy_period_start = 0 if holy_period_start < 0 else holy_period_start
-        return self.sos_list[holy_period_start:]
+        return self.sos_days[holy_period_start:]
 
     def _is_sponsors_family_in_sponsor_holy_period_length(self, member):
         if not member.is_sponsor:
             return False
+        return self.is_member_in_period(member, self._get_sponsor_holy_period())
 
-        sponsor_holy_period_mebers = self._get_sponsor_holy_period_members()
-        for o in self.members:
-            if o.family == member.family:
-                if o in sponsor_holy_period_mebers:
-                    return True
+    @staticmethod
+    def is_member_in_period(member, period):
+        for day in period:
+            if day.contains_family(member.family):
+                return True
         return False
 
     def _is_sponsored_and_sponsor_is_in_pot(self, member):

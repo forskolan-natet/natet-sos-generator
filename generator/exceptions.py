@@ -4,3 +4,7 @@ class DeadlockInGenerationError(Exception):
 
 class NotPossibleToGenerateSosError(Exception):
     pass
+
+
+class TooManyMembersOnDayError(Exception):
+    pass
