@@ -18,17 +18,17 @@ class TestDayList(TestCase):
     def test_member_is_allowed_on_day_when_no_end_date_is_set(self):
         member = Member(end_date=None)
         day = Day("2017-01-01")
-        self.assertFalse(DayList.is_day_withing_members_end_grace_period(member=member, day=day))
+        self.assertFalse(DayList.is_day_within_members_end_grace_period(member=member, day=day))
 
     def test_member_is_allowed_on_day_when_end_date_is_outside_grace_period(self):
         member = Member(end_date="2017-02-15")
         day = Day("2017-01-01")
-        self.assertFalse(DayList.is_day_withing_members_end_grace_period(member=member, day=day))
+        self.assertFalse(DayList.is_day_within_members_end_grace_period(member=member, day=day))
 
     def test_member_is_not_allowed_on_day_when_end_date_is_within_grace_period(self):
         member = Member(end_date="2017-01-15")
         day = Day("2017-01-01")
-        self.assertTrue(DayList.is_day_withing_members_end_grace_period(member=member, day=day))
+        self.assertTrue(DayList.is_day_within_members_end_grace_period(member=member, day=day))
 
     def test_prev_month(self):
         self.assertEqual("2017-01-01", self._prev_month("2017-02-01"))

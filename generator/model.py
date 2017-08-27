@@ -1,12 +1,13 @@
 import random
 from datetime import datetime
 
-from .exceptions import TooManyMembersOnDayError
+from .exceptions import DepartmentNotAvailableError, TooManyMembersOnDayError
+from .constants import GRANEN_ID, TALLEN_ID
 
 
 class Member:
     def __init__(self, id=0, first_name="", last_name="", sos_percentage=100, family=0, sponsor_for_family=None,
-                 sponsored_by_family=None, end_date=None):
+                 sponsored_by_family=None, end_date=None, start_date=None):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
@@ -14,6 +15,7 @@ class Member:
         self.family = family
         self.sponsor_for_family = sponsor_for_family
         self.sponsored_by_family = sponsored_by_family
+        self.start_date = start_date
         if isinstance(end_date, str):
             self.end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
         else:
@@ -43,18 +45,24 @@ class MemberList(list):
             members.append(Member(**m))
         return members
 
+    def get_by_id(self, id):
+        for member in self:
+            if member.id == id:
+                return member
+        return None
+
 
 class Day():
     def __init__(self, date, members=[]):
         random.shuffle(members)
         self.date = date
-        self.members = []
+        self.members = [None] * 2
         for m in members:
             self.put(m)
 
     @property
     def is_full(self):
-        return len(self.members) >= 2
+        return len(self.members) >= 2 and self.members[0] is not None and self.members[1] is not None
 
     @property
     def tallen(self):
@@ -64,15 +72,29 @@ class Day():
     def granen(self):
         return self.members[1] if self.members and len(self.members) == 2 else None
 
-    def put(self, member):
+    def put(self, member, department=None):
         if self.is_full:
             raise TooManyMembersOnDayError
-        self.members.append(member)
-        random.shuffle(self.members)
+
+        if department == TALLEN_ID:
+            if not self.tallen:
+                self.members[0] = member
+            else:
+                raise DepartmentNotAvailableError
+        elif department == GRANEN_ID and not self.granen:
+            if not self.granen:
+                self.members[1] = member
+            else:
+                raise DepartmentNotAvailableError
+        else:
+            if not self.tallen:
+                self.members[0] = member
+            elif not self.granen:
+                self.members[1] = member
 
     def contains_family(self, family):
         for m in self.members:
-            if m.family == family:
+            if m and m.family == family:
                 return True
         return False
 
@@ -84,7 +106,7 @@ class DayList(list):
     def __init__(self, work_days_service):
         self.work_days_service = work_days_service
 
-    def append_member(self, member: Member):
+    def append_member(self, member: Member, department=None):
         if len(self) == 0:
             last_day = Day(self.work_days_service.next())
             self.append(last_day)
@@ -95,18 +117,28 @@ class DayList(list):
             last_day = Day(self.work_days_service.next())
             self.append(last_day)
 
-        if DayList.is_day_withing_members_end_grace_period(member, last_day):
+        if DayList.is_day_within_members_end_grace_period(member, last_day) \
+                or DayList.is_day_within_members_start_grace_period(member, last_day):
             return
 
-        last_day.put(member)
+        last_day.put(member, department)
 
     @staticmethod
-    def is_day_withing_members_end_grace_period(member, day):
+    def is_day_within_members_end_grace_period(member, day):
         if member.end_date:
             member_end_date = member.end_date
             prev_month_date = DayList.prev_month(member_end_date)
             day_date = datetime.strptime(day.date, "%Y-%m-%d").date()
             return prev_month_date < day_date
+        return False
+
+    @staticmethod
+    def is_day_within_members_start_grace_period(member, day):
+        if member.start_date:
+            member_start_date = member.start_date
+            next_month_date = DayList.next_month(member_start_date)
+            day_date = datetime.strptime(day.date, "%Y-%m-%d").date()
+            return day_date < next_month_date
         return False
 
     @staticmethod
@@ -116,6 +148,16 @@ class DayList(list):
         else:
             try:
                 return date.replace(month=date.month - 1)
+            except ValueError:
+                return DayList.prev_month(date=date.replace(day=date.day - 1))
+
+    @staticmethod
+    def next_month(date):
+        if date.month == 12:
+            return date.replace(month=1, year=date.year + 1)
+        else:
+            try:
+                return date.replace(month=date.month + 1)
             except ValueError:
                 return DayList.prev_month(date=date.replace(day=date.day - 1))
 

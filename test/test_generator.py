@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from generator.exceptions import DeadlockInGenerationError, NotPossibleToGenerateSosError
+from generator.exceptions import NotPossibleToGenerateSosError
 from generator.generator import Generator
 from generator.model import Member
 from generator.integration.mock import MockWorkDaysService, MockClosedDaysDAO, MockDrygDAO
@@ -66,11 +66,11 @@ class TestGenerator(TestCase):
 
     def test_sponsor_is_on_same_day_as_sponsored(self):
         sponsor = Member(first_name="sponsor", sos_percentage=50, family=100, sponsor_for_family=200)
-        sponsored = Member(first_name="sponsored", sos_percentage=50, family=200)
+        sponsored = Member(first_name="sponsored", sos_percentage=50, family=200, sponsored_by_family=100)
 
         members = self._large_list_of_members
         members.extend([sponsor, sponsored])
-        generator = Generator(members, self._basic_mock_work_day_service, sponsor_holy_period_length=0)
+        generator = Generator(members, self._basic_mock_work_day_service)
 
         generator.generate()
         sos_days = generator.sos_days
@@ -79,47 +79,16 @@ class TestGenerator(TestCase):
             if sponsor in day.members:
                 self.assertTrue(sponsored in day.members)
                 was_found = True
+                break
         self.assertTrue(was_found)
 
     def test_generator_retries_if_deadlock_occurs(self):
         m1 = Member(family=1)
         m2 = Member(family=1)
-        generator = Generator([m1, m2], self._basic_mock_work_day_service)
+        generator = Generator([m1, m2], self._basic_mock_work_day_service, number_of_retries=10)
         with self.assertRaises(NotPossibleToGenerateSosError):
             generator.generate()
-        self.assertEqual(generator.number_of_retries_done, 1000)
-
-    def test_sponsors_are_always_picked_first(self):
-        sponsor = Member(first_name="sponsor", sos_percentage=50, family=100, sponsor_for_family=200)
-        sponsored = Member(first_name="sponsored", sos_percentage=50, family=200)
-
-        members = self._large_list_of_members
-        members.extend([sponsor, sponsored])
-        generator = Generator(members, self._basic_mock_work_day_service)
-        generator.generate()
-        first_day = generator.sos_days[0]
-        self.assertTrue(sponsor in first_day.members)
-        self.assertTrue(sponsored in first_day.members)
-
-    def test_sponsor_is_picked_direct_after_holy_period(self):
-        sponsor = Member(first_name="sponsor", sos_percentage=100, family=100, sponsor_for_family=200)
-        sponsored = Member(first_name="sponsored", sos_percentage=100, family=200, sponsored_by_family=100)
-
-        sponsor_holy_period_length = 10
-
-        members = self._large_list_of_members
-        members.extend([sponsor, sponsored])
-        generator = Generator(members, self._basic_mock_work_day_service,
-                              holy_period_length=1, sponsor_holy_period_length=sponsor_holy_period_length)
-        generator.generate()
-
-        first_day = generator.sos_days[0]
-        self.assertTrue(sponsor in first_day.members)
-        self.assertTrue(sponsored in first_day.members)
-
-        day_after_sponsor_holy_period = generator.sos_days[sponsor_holy_period_length + 1]
-        self.assertTrue(sponsor in day_after_sponsor_holy_period.members)
-        self.assertTrue(sponsored in day_after_sponsor_holy_period.members)
+        self.assertEqual(generator.number_of_retries_done, 10)
 
     def test_sponsored_with_higher_proportion_than_sponsor_still_gets_sos(self):
         sponsor1 = Member(sos_percentage=50, family=100, sponsor_for_family=200)
@@ -128,8 +97,7 @@ class TestGenerator(TestCase):
         sponsored2 = Member(sos_percentage=100, family=200, sponsored_by_family=100)
 
         members = [sponsor1, sponsor2, sponsored1, sponsored2]
-        generator = Generator(members, self._basic_mock_work_day_service,
-                              sponsor_holy_period_length=0, holy_period_length=0)
+        generator = Generator(members, self._basic_mock_work_day_service, holy_period_length=0)
         generator.generate()
         self.assertEqual(generator.sos_days.members.count(sponsor1), 1)
         self.assertEqual(generator.sos_days.members.count(sponsor2), 1)
@@ -140,8 +108,7 @@ class TestGenerator(TestCase):
         m1 = Member(sos_percentage=50, family=1)
         m2 = Member(sos_percentage=50, family=2)
         m3 = Member(sos_percentage=50, family=3, end_date="2017-01-03")
-        generator = Generator([m1, m2, m3], self._basic_mock_work_day_service,
-                              sponsor_holy_period_length=0, holy_period_length=0)
+        generator = Generator([m1, m2, m3], self._basic_mock_work_day_service, holy_period_length=0)
         generator.sos_days.append_member(m1)
         generator.sos_days.append_member(m2)
         generator.sos_days.append_member(m3)
@@ -149,7 +116,6 @@ class TestGenerator(TestCase):
 
     def test_last_day_is_full(self):
         m = Member(sos_percentage=50, family=1)
-        generator = Generator([m], self._basic_mock_work_day_service,
-                              sponsor_holy_period_length=0, holy_period_length=0)
+        generator = Generator([m], self._basic_mock_work_day_service, holy_period_length=0)
         generator.generate()
         self.assertListEqual([], generator.sos_days)

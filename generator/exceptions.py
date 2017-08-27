@@ -8,3 +8,11 @@ class NotPossibleToGenerateSosError(Exception):
 
 class TooManyMembersOnDayError(Exception):
     pass
+
+
+class BadDistributionBetweenDepartmentsError(Exception):
+    pass
+
+
+class DepartmentNotAvailableError(Exception):
+    pass
