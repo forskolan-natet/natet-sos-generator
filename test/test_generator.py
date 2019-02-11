@@ -90,20 +90,6 @@ class TestGenerator(TestCase):
             generator.generate()
         self.assertEqual(generator.number_of_retries_done, 10)
 
-    def test_sponsored_with_higher_proportion_than_sponsor_still_gets_sos(self):
-        sponsor1 = Member(sos_percentage=50, family=100, sponsor_for_family=200)
-        sponsor2 = Member(sos_percentage=50, family=100, sponsor_for_family=200)
-        sponsored1 = Member(sos_percentage=100, family=200, sponsored_by_family=100)
-        sponsored2 = Member(sos_percentage=100, family=200, sponsored_by_family=100)
-
-        members = [sponsor1, sponsor2, sponsored1, sponsored2]
-        generator = Generator(members, self._basic_mock_work_day_service, holy_period_length=0)
-        generator.generate()
-        self.assertEqual(generator.sos_days.members.count(sponsor1), 1)
-        self.assertEqual(generator.sos_days.members.count(sponsor2), 1)
-        self.assertEqual(generator.sos_days.members.count(sponsored1), 2)
-        self.assertEqual(generator.sos_days.members.count(sponsored2), 2)
-
     def test_member_is_not_allowed_to_have_sos_in_end_grace_period(self):
         m1 = Member(sos_percentage=50, family=1)
         m2 = Member(sos_percentage=50, family=2)

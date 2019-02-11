@@ -18,6 +18,7 @@ members = MemberList.create_from_dicts(members_dicts)
 
 schedule_live_dao = ScheduleLiveDAO()
 start_after_date = schedule_live_dao.get_last_scheduled_date()
+print("Start at date %s\n" % start_after_date)
 work_days_service = WorkDaysService(start_after_date=start_after_date,
                                     closed_days_dao=ClosedDaysDAO(),
                                     dryg_dao=DrygDAO())
@@ -34,7 +35,7 @@ g.generate()
 sos_per_family = {}
 print("\n\nStäng och städ per datum")
 for day in g.sos_days:
-    print("%s Tallen: %s, Granen: %s" % (day.date, day.tallen.name, day.granen.name))
+    print("%s\tTallen: %s,\tGranen: %s" % (day.date, day.tallen.name, day.granen.name))
     for member in day.members:
         text = "%s\t%s\t%s" % (day.date, "Tallen" if member is day.tallen else "Granen", member.name)
         if member.family in sos_per_family:

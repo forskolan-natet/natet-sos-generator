@@ -6,8 +6,8 @@ from .exceptions import BadDistributionBetweenDepartmentsError, DeadlockInGenera
 from .model import DayList
 from .integration.workdays import WorkDaysService
 
-DEFAULT_HOLY_PERIOD_LENGTH = 10
-DEFAULT_MAX_NUMBER_OF_RETRIES = 1000000
+DEFAULT_HOLY_PERIOD_LENGTH = 11
+DEFAULT_MAX_NUMBER_OF_RETRIES = 100000
 
 
 class Generator:
@@ -87,10 +87,6 @@ class Generator:
                 sos_per_family[family] = {"tallen": 0, "granen": 0}
 
             sos_per_family[family]["granen"] = sos_per_family[family]["granen"] + 1
-
-        # Ful-haxx
-        if not sos_per_family.get(42) and not sos_per_family.get(41):
-            raise DeadlockInGenerationError
 
         bad_count = 0
         for family, sos_count_per_department in sos_per_family.items():
