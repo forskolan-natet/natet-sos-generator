@@ -1,9 +1,10 @@
 import MySQLdb
+from generator.date_range import date_range
 
 
 class DAO:
     def __init__(self):
-        self.db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="kaka1234", db="sosnatet_1")
+        self.db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="kaka1234", db="forskolannatet")
 
     def _run(self):
         cursor = self.db.cursor()
@@ -12,66 +13,62 @@ class DAO:
 
 
 class ClosedDaysDAO(DAO):
-    query = """SELECT sc.`theDay` FROM `scheduleClosed` sc WHERE sc.`theDay` > CURDATE()"""
+    query = """
+            select date(dat_begin) start, date(dat_end) end
+            from adm_dates
+            where dat_cat_id = 19
+                and dat_all_day = 1;
+            """
 
     def get_closed_days(self):
         result = self._run()
 
         closed_days = []
-        for day in result:
-            closed_days.append(day[0].strftime("%Y-%m-%d"))
+        for start, end in result:
+            for date in date_range(start, end):
+                closed_days.append(date.strftime("%Y-%m-%d"))
+
         return closed_days
     
 
 class MembersDAO(DAO):
     query = """
-            SELECT
-                `id`,
-                `firstname`,
-                `lastname`,
-                `sosPercentage`,
-                `startDate`,
-                `dateEnd`,
-                `family_id`,
-                `s1`.`newFamilyID` AS `sponsor_for_family`,
-                `s2`.`sponsorFamilyID` AS `sponsored_by_family`
-            FROM
-                (
-                    SELECT
-                        `member`.`id`,
-                        `member`.`firstname`,
-                        `member`.`lastname`,
-                        `member`.`sosPercentage`,
-                        `member`.`startDate`,
-                        `member`.`dateEnd`,
-                        `families`.`groupID` as `family_id`
-                    FROM
-                        `member`,
-                        (SELECT
-                            `member_group`.`memberID`,
-                            `member_group`.`groupID`
-                        FROM
-                            `group`,
-                            `member_group`
-                        WHERE
-                            `group`.`id`=`member_group`.`groupID`
-                            AND `group`.`type`=1) AS `families`
-                    WHERE
-                        `member`.`id`=`families`.`memberID`
-                        AND `member`.`isActive`=1
-                        AND `member`.`isChild`=0
-                        AND `member`.`sosPercentage`>0
-                ) as members
-            LEFT JOIN `sponsor` AS `s1` ON `s1`.`sponsorFamilyID` = `members`.`family_id`
-            LEFT JOIN `sponsor`AS `s2` ON `s2`.`newFamilyID` = `members`.`family_id`;
+            select
+                users.usr_id AS id,
+                (select user_data.usd_value from adm_user_data as user_data where user_data.usd_usr_id = users.usr_id and user_data.usd_usf_id = 2) AS firstname,
+                (select user_data.usd_value from adm_user_data as user_data where user_data.usd_usr_id = users.usr_id and user_data.usd_usf_id = 1) AS lastname,
+                (select members.mem_begin from adm_members as members where members.mem_usr_id = users.usr_id and members.mem_rol_id = 2) as startDate, # 2=Member
+                (select members.mem_end from adm_members as members where members.mem_usr_id = users.usr_id and members.mem_rol_id = 2) as endDate, # 2=Member
+                (select relations.ure_usr_id2 from adm_user_relations as relations where relations.ure_urt_id = 5 and users.usr_id = relations.ure_usr_id1) as partner_id,
+                (select relations.ure_usr_id2 from adm_user_relations as relations where relations.ure_urt_id = 6 and users.usr_id = relations.ure_usr_id1 limit 1) as sponsorTo,
+                (select relations.ure_usr_id2 from adm_user_relations as relations where relations.ure_urt_id = 7 and users.usr_id = relations.ure_usr_id1 limit 1) as sponsor,
+                (case
+                    when 0 < (select count(*) from adm_members as members
+                              where members.mem_usr_id = users.usr_id
+                              and members.mem_leader = 1
+                              and members.mem_rol_id in (9, 10)) then 0 # 9=personal, 10=ekonomi
+                    when 0 < (select count(*) from adm_members as members
+                              where members.mem_usr_id = users.usr_id
+                              and members.mem_rol_id in (5, 15)) then 50 # 5=styrelsen, 15=Löneansvarig
+                    else 100 end) as sosPercentage
+            from
+                adm_users users
+            where # Only actvive members
+                (select count(*) from adm_members as members
+                where members.mem_rol_id = 2
+                and members.mem_usr_id = users.usr_id
+                and members.mem_end > CURDATE()) > 0
+            and # No kids
+                (select count(*) from adm_members as members  where members.mem_rol_id = 11 and members.mem_usr_id = users.usr_id) = 0
+            order by sosPercentage asc;
             """
 
     def get_members_for_sos_generator(self):
         result = self._run()
 
         members = []
-        for id, first_name, last_name, sos_percentage, start_date, end_date, family_id, sponsor_for_family, \
-                sponsored_by_family in result:
+        for id, first_name, last_name, start_date, end_date, partner_id, sponsor_to_member, \
+                sponsored_by_member, sos_percentage in result:
             members.append({
                 "id": id,
                 "first_name": first_name,
@@ -79,32 +76,32 @@ class MembersDAO(DAO):
                 "sos_percentage": sos_percentage,
                 "start_date": start_date,
                 "end_date": end_date,
-                "family": family_id,
-                "sponsor_for_family": sponsor_for_family,
-                "sponsored_by_family": sponsored_by_family
+                "sponsor_to_member": sponsor_to_member,
+                "sponsored_by_member": sponsored_by_member,
+                "partner_id": partner_id
             })
         return members
 
 
 class ScheduleLiveDAO(DAO):
-    select_last_scheduled_date = """SELECT DATE(MAX(sl.`theDay`)) FROM `scheduleLive` sl"""
+    select_last_scheduled_date = """SELECT DATE(MAX(sl.`day`)) FROM `sos_schedule` sl"""
     select_last_ten_sos_days = """
         SELECT
-            `sl`.`theDay`,
-            `sl`.`departmentID`,
-            `sl`.`memberID`
+            `sl`.`day`,
+            `sl`.`department_id`,
+            `sl`.`user_id`
         FROM
             (
                 SELECT
-                    `theDay`,
-                    `departmentID`,
-                    `memberID`
+                    `day`,
+                    `department_id`,
+                    `user_id`
                 FROM
-                    `scheduleLive`
-                ORDER BY `theDay` DESC
+                    `sos_schedule`
+                ORDER BY `day` DESC
                 LIMIT 20
             ) as `sl`
-        ORDER BY `sl`.`theDay` ASC
+        ORDER BY `sl`.`day` ASC
         """
 
     def get_last_scheduled_date(self):

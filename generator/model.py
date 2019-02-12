@@ -7,7 +7,8 @@ from .constants import GRANEN_ID, TALLEN_ID
 
 class Member:
     def __init__(self, id=0, first_name="", last_name="", sos_percentage=100, family=0, sponsor_for_family=None,
-                 sponsored_by_family=None, end_date=None, start_date=None):
+                 sponsored_by_family=None, end_date=None, start_date=None, partner_id=None, sponsor_to_member=None,
+                 sponsored_by_member=None):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
@@ -16,6 +17,9 @@ class Member:
         self.sponsor_for_family = sponsor_for_family
         self.sponsored_by_family = sponsored_by_family
         self.start_date = start_date
+        self.sponsor_to_member = sponsor_to_member
+        self.sponsored_by_member = sponsored_by_member
+        self.partner_id = partner_id
         if isinstance(end_date, str):
             self.end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
         else:
