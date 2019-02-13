@@ -1,4 +1,4 @@
-from generator.integration.database import MembersDAO, ClosedDaysDAO, SchedulePlanningDAO, GroupDAO, ScheduleLiveDAO, SponsorDAO
+from generator.integration.database import MembersDAO, ClosedDaysDAO, SchedulePlanningDAO, ScheduleLiveDAO
 from generator.generator import Generator
 from generator.integration.workdays import WorkDaysService
 from generator.integration.dryg import DrygDAO
@@ -43,9 +43,8 @@ for day in g.sos_days:
         else:
             sos_per_family[member.family] = [text]
 
-groups = GroupDAO().get_groups()
 for family_id, sos_list in sos_per_family.items():
-    print("\nFamiljen %s:" % groups[family_id].name)
+    print("\n%s:" % members.get_family_name_by_family_id(family_id))
     for sos in sos_list:
         print(sos)
 

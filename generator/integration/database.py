@@ -133,33 +133,3 @@ class SchedulePlanningDAO(DAO):
             self.db.commit()
         except:
             self.db.rollback()
-
-
-class Group:
-    def __init__(self, name, type):
-        self.name = name
-        self.type = type
-
-
-class GroupDAO(DAO):
-    query = """SELECT id, name, type FROM `group`"""
-
-    def get_groups(self):
-        result = self._run()
-        groups = {}
-        for id, name, type in result:
-            groups[id] = Group(name, type)
-
-        return groups
-
-
-class SponsorDAO(DAO):
-    query = """SELECT sponsorFamilyID, newFamilyID FROM `sponsor`"""
-
-    def get_groups(self):
-        result = self._run()
-        sponsors = {}
-        for sponsor_family_id, new_family_id in result:
-            sponsors[sponsor_family_id] = new_family_id
-
-        return sponsors

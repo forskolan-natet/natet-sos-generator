@@ -5,6 +5,9 @@ from .exceptions import DepartmentNotAvailableError, TooManyMembersOnDayError
 from .constants import GRANEN_ID, TALLEN_ID
 
 
+today = datetime.now().date()
+
+
 class Member:
     def __init__(self, id=0, first_name="", last_name="", sos_percentage=100, family=0, sponsor_for_family=None,
                  sponsored_by_family=None, end_date=None, start_date=None, partner_id=None, sponsor_to_member=None,
@@ -20,6 +23,7 @@ class Member:
         self.sponsor_to_member = sponsor_to_member
         self.sponsored_by_member = sponsored_by_member
         self.partner_id = partner_id
+        self.family_name = None
         if isinstance(end_date, str):
             self.end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
         else:
@@ -47,7 +51,48 @@ class MemberList(list):
         members = MemberList()
         for m in dicts:
             members.append(Member(**m))
+
+        members._parse_families()
+        members._parse_sponsors()
         return members
+
+    def _parse_families(self):
+        family_id = 0
+        members_dict = self.__members_by_id()
+        new_members_list = []
+
+        while len(members_dict) > 0:
+            family_id += 1
+            member1 = members_dict.popitem()[1]
+            member1.family = family_id
+            new_members_list.append(member1)
+            family_name = '%s %s' % (member1.first_name, member1.last_name)
+            if member1.partner_id:
+                member2 = members_dict.pop(member1.partner_id)
+                member2.family = family_id
+                new_members_list.append(member2)
+                family_name = "Familjen %s & %s %s" % (family_name, member2.first_name, member2.last_name)
+                member2.family_name = family_name
+            member1.family_name = family_name
+
+    def _parse_sponsors(self):
+        for member in self:
+            if member.sponsor_to_member:
+                sponsored = self.get_by_id(member.sponsor_to_member)
+                if MemberList.__is_within_sponsor_period(sponsored):
+                    member.sponsor_for_family = sponsored.family
+
+            if member.sponsored_by_member:
+                if MemberList.__is_within_sponsor_period(member):
+                    sponsor = self.get_by_id(member.sponsored_by_member)
+                    member.sponsored_by_family = sponsor.family
+
+    @staticmethod
+    def __is_within_sponsor_period(member):
+        return member.start_date and (today - member.start_date).days < 90
+
+    def __members_by_id(self):
+        return {x.id: x for x in self}
 
     def get_by_id(self, id):
         for member in self:
@@ -55,6 +100,10 @@ class MemberList(list):
                 return member
         return None
 
+    def get_family_name_by_family_id(self, family_id):
+        for member in self:
+            if member.family == family_id:
+                return member.family_name
 
 class Day():
     def __init__(self, date, members=[]):
