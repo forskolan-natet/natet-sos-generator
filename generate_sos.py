@@ -4,6 +4,8 @@ from generator.integration.workdays import WorkDaysService
 from generator.integration.dryg import DrygDAO
 from generator.model import Day, DayList, MemberList
 from generator.constants import TALLEN_ID, GRANEN_ID
+from icalendar import Calendar, Event
+from datetime import datetime
 
 
 def store_sos(sos_days):
@@ -37,16 +39,32 @@ print("\n\nStäng och städ per datum")
 for day in g.sos_days:
     print("%s\tTallen: %s,\tGranen: %s" % (day.date, day.tallen.name, day.granen.name))
     for member in day.members:
-        text = "%s\t%s\t%s" % (day.date, "Tallen" if member is day.tallen else "Granen", member.name)
+        obj = {
+            'date': day.date,
+            'department': "Tallen" if member is day.tallen else "Granen",
+            'member': member.name
+        }
         if member.family in sos_per_family:
-            sos_per_family[member.family].append(text)
+            sos_per_family[member.family].append(obj)
         else:
-            sos_per_family[member.family] = [text]
+            sos_per_family[member.family] = [obj]
 
 for family_id, sos_list in sos_per_family.items():
-    print("\n%s:" % members.get_family_name_by_family_id(family_id))
+    family_name = members.get_family_name_by_family_id(family_id)
+    print("\n%s:" % family_name)
+    cal = Calendar()
     for sos in sos_list:
-        print(sos)
+        print("%s\t%s\t%s" % (sos['date'], sos['department'], sos['member']))
+        event = Event()
+
+        event.add('summary', 'Stäng och städ på %s' % sos['department'])
+        date_parts = sos['date'].split('-')
+        event.add('dtstart', datetime(int(date_parts[0]), int(date_parts[1]), int(date_parts[2]), 15, 0, 0))
+        event.add('dtend', datetime(int(date_parts[0]), int(date_parts[1]), int(date_parts[2]), 18, 0, 0))
+        cal.add_component(event)
+    f = open('%s.ics' % family_name, 'wb')
+    f.write(cal.to_ical())
+    f.close()
 
 print("\n\nShall we store in database? (y/n)")
 choice = input().lower()
