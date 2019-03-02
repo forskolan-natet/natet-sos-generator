@@ -124,12 +124,12 @@ class ScheduleLiveDAO(DAO):
 
 
 class SchedulePlanningDAO(DAO):
-    query = """INSERT INTO `schedulePlanning` (`theDay`, `departmentID`, `memberID`) VALUES (%s, %s, %s);"""
+    query = """INSERT INTO `sos_schedule` (`day`, `department_id`, `user_id`) VALUES (%s, %s, %s);"""
 
-    def add_sos(self, date, department_id, member_id):
+    def add_sos(self, date, department_id, user_id):
         cursor = self.db.cursor()
         try:
-            cursor.execute(self.query, (date, department_id, member_id))
+            cursor.execute(self.query, (date, department_id, user_id))
             self.db.commit()
         except:
             self.db.rollback()
