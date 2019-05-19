@@ -46,10 +46,12 @@ class MembersDAO(DAO):
                     when 0 < (select count(*) from adm_members as members
                               where members.mem_usr_id = users.usr_id
                               and members.mem_leader = 1
-                              and members.mem_rol_id in (9, 10)) then 0 # 9=personal, 10=ekonomi
+                              and members.mem_rol_id in (9, 10) # 9=personal, 10=ekonomi
+                              and members.mem_end > cast((now() + interval 1 month) as date)) then 0
                     when 0 < (select count(*) from adm_members as members
                               where members.mem_usr_id = users.usr_id
-                              and members.mem_rol_id in (5, 15)) then 50 # 5=styrelsen, 15=Löneansvarig
+                              and members.mem_rol_id in (5, 15) # 5=styrelsen, 15=Löneansvarig
+                              and members.mem_end > cast((now() + interval 1 month) as date)) then 50
                     else 100 end) as sosPercentage
             from
                 adm_users users
