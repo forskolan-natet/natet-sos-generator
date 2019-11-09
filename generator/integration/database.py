@@ -40,7 +40,6 @@ class MembersDAO(DAO):
                 (select members.mem_begin from adm_members as members where members.mem_usr_id = users.usr_id and members.mem_rol_id = 2) as startDate, # 2=Member
                 (select members.mem_end from adm_members as members where members.mem_usr_id = users.usr_id and members.mem_rol_id = 2) as endDate, # 2=Member
                 (select relations.ure_usr_id2 from adm_user_relations as relations where relations.ure_urt_id = 5 and users.usr_id = relations.ure_usr_id1) as partner_id,
-                (select relations.ure_usr_id2 from adm_user_relations as relations where relations.ure_urt_id = 6 and users.usr_id = relations.ure_usr_id1 limit 1) as sponsorTo,
                 (select relations.ure_usr_id2 from adm_user_relations as relations where relations.ure_urt_id = 7 and users.usr_id = relations.ure_usr_id1 limit 1) as sponsor,
                 (case
                     when 0 < (select count(*) from adm_members as members
@@ -55,7 +54,7 @@ class MembersDAO(DAO):
                     else 100 end) as sosPercentage
             from
                 adm_users users
-            where # Only actvive members
+            where # Only active members
                 (select count(*) from adm_members as members
                 where members.mem_rol_id = 2
                 and members.mem_usr_id = users.usr_id
@@ -69,8 +68,7 @@ class MembersDAO(DAO):
         result = self._run()
 
         members = []
-        for id, first_name, last_name, start_date, end_date, partner_id, sponsor_to_member, \
-                sponsored_by_member, sos_percentage in result:
+        for id, first_name, last_name, start_date, end_date, partner_id, sponsored_by_member, sos_percentage in result:
             members.append({
                 "id": id,
                 "first_name": first_name,
@@ -78,7 +76,6 @@ class MembersDAO(DAO):
                 "sos_percentage": sos_percentage,
                 "start_date": start_date,
                 "end_date": end_date,
-                "sponsor_to_member": sponsor_to_member,
                 "sponsored_by_member": sponsored_by_member,
                 "partner_id": partner_id
             })

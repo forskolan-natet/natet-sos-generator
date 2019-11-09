@@ -52,13 +52,14 @@ class TestFamilyParser(TestCase):
     def test_can_parse_sponsor(self):
         today = datetime.now().date()
         members = MemberList()
-        members.extend([Member(id=1, partner_id=2, sponsor_to_member=3),
-                        Member(id=2, partner_id=1, sponsor_to_member=3),
+        members.extend([Member(id=1, partner_id=2),
+                        Member(id=2, partner_id=1),
                         Member(id=3, partner_id=4, sponsored_by_member=1, start_date=today),
                         Member(id=4, partner_id=3, sponsored_by_member=1, start_date=today)])
         members._parse_families()
         members._parse_sponsors()
         self.assertIsNotNone(members.get_by_id(1).sponsor_for_family)
+        self.assertIsNotNone(members.get_by_id(2).sponsor_for_family)
         self.assertEqual(members.get_by_id(1).sponsor_for_family, members.get_by_id(2).sponsor_for_family)
         self.assertEqual(members.get_by_id(1).sponsor_for_family, members.get_by_id(3).family)
         self.assertEqual(members.get_by_id(1).sponsor_for_family, members.get_by_id(4).family)
