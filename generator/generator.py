@@ -6,7 +6,7 @@ from .exceptions import BadDistributionBetweenDepartmentsError, DeadlockInGenera
 from .model import DayList
 from .integration.workdays import WorkDaysService
 
-DEFAULT_HOLY_PERIOD_LENGTH = 11
+DEFAULT_HOLY_PERIOD_LENGTH = 9
 DEFAULT_MAX_NUMBER_OF_RETRIES = 100000
 
 
