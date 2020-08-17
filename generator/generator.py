@@ -70,8 +70,8 @@ class Generator:
         self.__remove_last_day_if_both_depatments_do_not_have_a_cleaner()
 
         for day in self.sos_days:
-            if day.tallen.is_sponsored and day.tallen.sponsored_by_family != day.granen.family \
-                    or day.granen.is_sponsored and day.granen.sponsored_by_family != day.tallen.family:
+            if day.tallen.is_sponsor and day.tallen.sponsor_for_family != day.granen.family \
+                    or day.granen.is_sponsor and day.granen.sponsor_for_family != day.tallen.family:
                 raise DeadlockInGenerationError
 
         sos_per_family = {}
