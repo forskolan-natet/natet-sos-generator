@@ -29,3 +29,11 @@ Ladda ner filerna till din remote desktop. Därifrån kan du klipp-o-klistra dem
 Släng kalenderfilerna på servern.
 
 Skicka mailet!!
+
+## Lokalt
+
+```bash
+pipenv shell
+rm *.ics
+python generate_sos.py
+```
