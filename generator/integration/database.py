@@ -1,10 +1,10 @@
-import MySQLdb
+import mysql.connector
 from generator.date_range import date_range
 
 
 class DAO:
     def __init__(self):
-        self.db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="kaka1234", db="forskolannatet")
+        self.db = mysql.connector.connect(host="127.0.0.1", user="root", passwd="kaka1234", db="forskolannatet")
 
     def _run(self):
         cursor = self.db.cursor()
