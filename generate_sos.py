@@ -6,6 +6,21 @@ from generator.model import Day, DayList, MemberList
 from generator.constants import TALLEN_ID, GRANEN_ID
 from icalendar import Calendar, Event
 from datetime import datetime
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--extraTo', dest='extra_to', type=int, nargs='*', help='member id of the member who shall have one extra sos')
+parser.add_argument('--lessTo', dest='less_to', type=int, nargs='*', help='member id of the member who shall have one less sos')
+args = parser.parse_args()
+
+extra_to = -1
+less_to = -1
+if args.extra_to:
+    print("Extra SOS to %s\n" % args.extra_to)
+    extra_to = args.extra_to
+if args.less_to:
+    print("Less SOS to %s\n" % args.less_to)
+    less_to = args.less_to
 
 
 def store_sos(sos_days):
@@ -24,6 +39,16 @@ print("Start at date %s\n" % start_after_date)
 work_days_service = WorkDaysService(start_after_date=start_after_date,
                                     closed_days_dao=ClosedDaysDAO(),
                                     dryg_dao=DrygDAO())
+
+for member in members:
+    if member.id in extra_to:
+        print("Extra SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
+        member.sos_percentage += 50
+        print("Extra SOS to %s with SOS percentage %s\n\n" % (member.name, member.sos_percentage))
+    if member.id in less_to and member.sos_percentage >= 50:
+        print("Less SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
+        member.sos_percentage -= 50
+        print("Less SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
 
 last_ten_days_dict = schedule_live_dao.get_last_ten_sos_days()
 last_ten_days = DayList(work_days_service=None)
