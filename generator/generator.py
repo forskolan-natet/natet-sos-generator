@@ -32,7 +32,9 @@ class Generator:
         self.work_days_service.reset()
         self.sos_days = DayList(work_days_service=self.work_days_service)
         for member in self.members:
-            if member.sos_percentage == 100:
+            if member.sos_percentage == 150:
+                self.pot.extend([member, member, member])
+            elif member.sos_percentage == 100:
                 self.pot.extend([member, member])
             elif member.sos_percentage == 50:
                 self.pot.append(member)
