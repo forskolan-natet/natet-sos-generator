@@ -9,7 +9,7 @@ verify_ssl = true
 appdirs = "==1.4.3"
 icalendar = "==4.0.3"
 pyparsing = "==2.2.0"
-requests = "==2.13.0"
+requests = "==2.20.0"
 six = "==1.10.0"
 mysql-connector-python = "*"
 
