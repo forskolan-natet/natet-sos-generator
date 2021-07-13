@@ -6,8 +6,8 @@ from .exceptions import BadDistributionBetweenDepartmentsError, DeadlockInGenera
 from .model import DayList
 from .integration.workdays import WorkDaysService
 
-DEFAULT_HOLY_PERIOD_LENGTH = 11
-DEFAULT_MAX_NUMBER_OF_RETRIES = 100000
+DEFAULT_HOLY_PERIOD_LENGTH = 10
+DEFAULT_MAX_NUMBER_OF_RETRIES = 10000
 
 
 class Generator:
@@ -40,7 +40,7 @@ class Generator:
                 self.pot.append(member)
 
     def generate(self):
-        one_thousandth = self.number_of_retries / 1000
+        percent = self.number_of_retries / 100
         while self.number_of_retries_done < self.number_of_retries and self._lowest_bad_count != 0:
             try:
                 self._populate_pot()
@@ -48,8 +48,8 @@ class Generator:
             except (BadDistributionBetweenDepartmentsError, DeadlockInGenerationError, DepartmentNotAvailableError):
                 self.number_of_retries_done += 1
 
-            if self.number_of_retries_done % one_thousandth == 0:
-                print("%s%% with lowest_bad_count at %s" % (self.number_of_retries_done / (one_thousandth * 10),
+            if self.number_of_retries_done % percent == 0:
+                print("%i%% with lowest_bad_count at %s" % (self.number_of_retries_done / percent,
                                                             self._lowest_bad_count))
 
         if self._lowest_bad_count_sos_days is None:
