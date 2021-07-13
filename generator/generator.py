@@ -45,7 +45,7 @@ class Generator:
             try:
                 self._populate_pot()
                 self.__generate()
-            except (BadDistributionBetweenDepartmentsError, DeadlockInGenerationError):
+            except (BadDistributionBetweenDepartmentsError, DeadlockInGenerationError, DepartmentNotAvailableError):
                 self.number_of_retries_done += 1
 
             if self.number_of_retries_done % one_thousandth == 0:
