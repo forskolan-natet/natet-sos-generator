@@ -2,6 +2,7 @@ class WorkDaysService:
     current_index = 0
 
     def __init__(self, start_after_date, closed_days_dao, dryg_dao):
+        self.start_after_date = start_after_date
         start_year = start_after_date[:4]
         self.work_days = dryg_dao.get_days_for_year(start_year)
         index_of_start_after_date = self.work_days.index(start_after_date)

@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from unittest import TestCase
 
 from generator.exceptions import NotPossibleToGenerateSosError
@@ -115,6 +116,36 @@ class TestGenerator(TestCase):
 
             self.assertEqual(found_sponsor, 1, "Sponsor should only have 1 SOS since they have 50% SOS")
             self.assertEqual(found_sponsored, 1, "Sponsored should only have 1 SOS since they need to be with sponsor")
+
+    def test_when_sponsored_starts_far_far_in_the_future(self):
+        sponsor = Member(first_name="sponsor", sos_percentage=100, family=100, sponsor_for_family=200)
+
+        mock_work_days_service = self._basic_mock_work_day_service
+        start_after_date = mock_work_days_service.start_after_date
+
+        # 120 days is a reasonable number indicating far in the future.
+        # The case is when generating SOS in July and member starts in November
+        the_future = datetime.strptime(start_after_date, '%Y-%m-%d').date() + timedelta(days=120)
+        sponsored = Member(first_name="sponsored", sos_percentage=100, family=200, sponsored_by_family=100,
+                           start_date=the_future)
+
+        members = self._large_list_of_members
+        members.extend([sponsor, sponsored])
+        generator = Generator(members, mock_work_days_service)
+
+        generator.generate()
+        sos_days = generator.sos_days
+
+        found_sponsor = 0
+        found_sponsored = 0
+        for day in sos_days:
+            if sponsor in day.members:
+                found_sponsor += 1
+            if sponsored in day.members:
+                found_sponsored += 1
+
+        self.assertEqual(found_sponsor, 2, "Sponsor have all their SOS, just as usual")
+        self.assertEqual(found_sponsored, 0, "Sponsored should have no SOS since they have not started on Nätet yet")
 
     def test_generator_retries_if_deadlock_occurs(self):
         m1 = Member(family=1)

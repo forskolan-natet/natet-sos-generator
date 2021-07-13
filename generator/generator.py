@@ -78,7 +78,10 @@ class Generator:
 
         for day in self.sos_days:
             if day.tallen.is_sponsor and day.tallen.sponsor_for_family != day.granen.family \
-                    or day.granen.is_sponsor and day.granen.sponsor_for_family != day.tallen.family:
+                    and DayList.is_day_within_members_start_grace_period(day.granen, day) \
+                    or \
+                    day.granen.is_sponsor and day.granen.sponsor_for_family != day.tallen.family \
+                    and DayList.is_day_within_members_start_grace_period(day.tallen, day):
                 raise DeadlockInGenerationError
 
         sos_per_family = {}
