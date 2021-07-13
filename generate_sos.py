@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from generator.integration.database import MembersDAO, ClosedDaysDAO, SchedulePlanningDAO, ScheduleLiveDAO
 from generator.generator import Generator
 from generator.integration.workdays import WorkDaysService
@@ -13,8 +15,8 @@ parser.add_argument('--extraTo', dest='extra_to', type=int, nargs='*', help='mem
 parser.add_argument('--lessTo', dest='less_to', type=int, nargs='*', help='member id of the member who shall have one less sos')
 args = parser.parse_args()
 
-extra_to = -1
-less_to = -1
+extra_to = []
+less_to = []
 if args.extra_to:
     print("Extra SOS to %s\n" % args.extra_to)
     extra_to = args.extra_to
@@ -42,11 +44,11 @@ work_days_service = WorkDaysService(start_after_date=start_after_date,
 
 for member in members:
     if member.id in extra_to:
-        print("Extra SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
+        print("Extra SOS to %s with SOS percentage %s" % (member.name, member.sos_percentage))
         member.sos_percentage += 50
-        print("Extra SOS to %s with SOS percentage %s\n\n" % (member.name, member.sos_percentage))
+        print("Extra SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
     if member.id in less_to and member.sos_percentage >= 50:
-        print("Less SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
+        print("Less SOS to %s with SOS percentage %s" % (member.name, member.sos_percentage))
         member.sos_percentage -= 50
         print("Less SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
 
