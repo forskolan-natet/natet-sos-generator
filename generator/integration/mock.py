@@ -4,6 +4,8 @@ from .workdays import WorkDaysService
 
 
 class MockClosedDaysDAO(ClosedDaysDAO):
+    is_test = True
+
     def get_closed_days(self):
         return ['2017-05-24', '2017-07-17', '2017-07-18', '2017-07-19', '2017-07-20', '2017-07-21', '2017-07-22',
                 '2017-07-23', '2017-07-24', '2017-07-25', '2017-07-26', '2017-07-27', '2017-07-28', '2017-07-29',
@@ -12,6 +14,8 @@ class MockClosedDaysDAO(ClosedDaysDAO):
 
 
 class MockDrygDAO(DrygDAO):
+    is_test = True
+
     def get_days_for_year(self, year):
         dates = {
             2017: ['2017-01-02', '2017-01-03', '2017-01-04', '2017-01-05', '2017-01-09', '2017-01-10', '2017-01-11',

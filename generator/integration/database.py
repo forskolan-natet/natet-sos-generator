@@ -4,7 +4,13 @@ from generator.date_range import date_range
 
 class DAO:
     def __init__(self):
-        self.db = mysql.connector.connect(host="127.0.0.1", user="root", passwd="kaka1234", db="forskolannatet")
+        try:
+            if self.is_test is True:
+                return
+        except AttributeError:
+            pass
+
+        self.db = mysql.connector.connect(host="192.168.0.10", user="forskolannatet", passwd="hR%p3BLwx:Gd8vx", db="forskolannatet")
 
     def _run(self):
         cursor = self.db.cursor()
