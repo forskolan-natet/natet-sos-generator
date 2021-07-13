@@ -74,13 +74,24 @@ class TestGenerator(TestCase):
 
         generator.generate()
         sos_days = generator.sos_days
-        was_found = False
+
+        found_sponsor = False
+        found_sponsored = False
         for day in sos_days:
             if sponsor in day.members:
-                self.assertTrue(sponsored in day.members)
-                was_found = True
-                break
-        self.assertTrue(was_found)
+                found_sponsor = True
+            if sponsored in day.members:
+                found_sponsored = True
+
+        self.assertTrue(found_sponsor, "Sponsor not in list")
+        self.assertTrue(found_sponsored, "Sponsored not in list")
+
+        for day in sos_days:
+            if sponsor in day.members or sponsored in day.members:
+                self.assertListEqual(sorted(day.members), sorted([sponsor, sponsored]))
+                return
+
+        self.fail("Sponsor was not in list of days")
 
     def test_generator_retries_if_deadlock_occurs(self):
         m1 = Member(family=1)

@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+from functools import total_ordering
 
 from .exceptions import DepartmentNotAvailableError, TooManyMembersOnDayError
 from .constants import GRANEN_ID, TALLEN_ID
@@ -8,6 +9,7 @@ from .constants import GRANEN_ID, TALLEN_ID
 today = datetime.now().date()
 
 
+@total_ordering
 class Member:
     def __init__(self, id=0, first_name="", last_name="", sos_percentage=100, family=0, sponsor_for_family=None,
                  sponsored_by_family=None, end_date=None, start_date=None, partner_id=None, sponsored_by_member=None):
@@ -41,6 +43,12 @@ class Member:
 
     def __repr__(self):
         return "<%s>" % self.name
+
+    # def __eq__(self, other):
+    #     return self.id == other.id
+
+    def __lt__(self, other):
+        return self.id < other.id
 
 
 class MemberList(list):
