@@ -70,8 +70,9 @@ class Generator:
                     self.__move_from_pot_to_sos_list(first_sponsored_family_member)
 
                 if member.sos_percentage < 100:
-                    next_sponsored_family_member = sponsored_family_members[1]
-                    self.pot.remove(next_sponsored_family_member)
+                    next_sponsored_family_member = sponsored_family_members[-1]
+                    if next_sponsored_family_member in self.pot:
+                        self.pot.remove(next_sponsored_family_member)
 
         self.__remove_last_day_if_both_depatments_do_not_have_a_cleaner()
 

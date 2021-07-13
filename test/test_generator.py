@@ -93,6 +93,29 @@ class TestGenerator(TestCase):
 
         self.fail("Sponsor was not in list of days")
 
+    def test_when_sponsor_has_only_50_percent_sos(self):
+        for i in range(0, 10):  # This test is flaky so repeat it
+            sponsor = Member(first_name="sponsor", sos_percentage=50, family=100, sponsor_for_family=200)
+            sponsored = Member(first_name="sponsored", sos_percentage=100, family=200, sponsored_by_family=100)
+
+            members = self._large_list_of_members
+            members.extend([sponsor, sponsored])
+            generator = Generator(members, self._basic_mock_work_day_service)
+
+            generator.generate()
+            sos_days = generator.sos_days
+
+            found_sponsor = 0
+            found_sponsored = 0
+            for day in sos_days:
+                if sponsor in day.members:
+                    found_sponsor += 1
+                if sponsored in day.members:
+                    found_sponsored += 1
+
+            self.assertEqual(found_sponsor, 1, "Sponsor should only have 1 SOS since they have 50% SOS")
+            self.assertEqual(found_sponsored, 1, "Sponsored should only have 1 SOS since they need to be with sponsor")
+
     def test_generator_retries_if_deadlock_occurs(self):
         m1 = Member(family=1)
         m2 = Member(family=1)
