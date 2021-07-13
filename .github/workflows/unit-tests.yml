@@ -19,12 +19,10 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: Install dependecies
-      uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: install -d # Install all dependencies, including development ones
+    - name: Install pipenv
+      run: pip install pipenv
 
-    - name: Test
-      uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: run test # Run custom `test` command defined in the `[scripts]` block of Pipfile
+    - name: Run tests
+      run: |
+        pipenv install --dev
+        pipenv run test
