@@ -44,15 +44,16 @@ work_days_service = WorkDaysService(start_after_date=start_after_date,
                                     closed_days_dao=ClosedDaysDAO(),
                                     dryg_dao=DrygDAO())
 
-for member in members:
-    if member.id in extra_to:
-        print("Extra SOS to %s with SOS percentage %s" % (member.name, member.sos_percentage))
-        member.sos_percentage += 50
-        print("Extra SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
-    if member.id in less_to and member.sos_percentage >= 50:
-        print("Less SOS to %s with SOS percentage %s" % (member.name, member.sos_percentage))
-        member.sos_percentage -= 50
-        print("Less SOS to %s with SOS percentage %s\n" % (member.name, member.sos_percentage))
+
+for id in extra_to:
+    member = members.get_by_id(id)
+    member.sos_percentage += 50
+    print("Extra SOS to %s. New SOS percentage is %s\n" % (member.name, member.sos_percentage))
+
+for id in less_to:
+    member = members.get_by_id(id)
+    member.sos_percentage -= 50
+    print("Less SOS to %s. New SOS percentage is %s\n" % (member.name, member.sos_percentage))
 
 last_ten_days_dict = schedule_live_dao.get_last_ten_sos_days()
 last_ten_days = DayList(work_days_service=None)
