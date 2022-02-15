@@ -25,21 +25,21 @@ class TestGenerator(TestCase):
     def test_generator_proportion_100_gives_two_sos(self):
         m = Member()
         m.sos_percentage = 100
-        generator = Generator([m], self._basic_mock_work_day_service)
+        generator = Generator([m], self._basic_mock_work_day_service, 10)
         generator._populate_pot()
         self.assertEqual(len(generator.pot), 2)
 
     def test_generator_proportion_50_gives_one_sos(self):
         m = Member()
         m.sos_percentage = 50
-        generator = Generator([m], self._basic_mock_work_day_service)
+        generator = Generator([m], self._basic_mock_work_day_service, 10)
         generator._populate_pot()
         self.assertEqual(len(generator.pot), 1)
 
     def test_generator_proportion_0_gives_no_sos(self):
         m = Member()
         m.sos_percentage = 0
-        generator = Generator([m], self._basic_mock_work_day_service)
+        generator = Generator([m], self._basic_mock_work_day_service, 10)
         self.assertEqual(len(generator.pot), 0)
 
     def test_list_is_random(self):
@@ -48,7 +48,7 @@ class TestGenerator(TestCase):
         for index, name in enumerate(names_ordered):
             members.append(Member(first_name=name, sos_percentage=50, family=index))
 
-        generator = Generator(members, self._basic_mock_work_day_service)
+        generator = Generator(members, self._basic_mock_work_day_service, 10)
         generator.generate()
         names = ""
         for day in generator.sos_days:
@@ -60,7 +60,7 @@ class TestGenerator(TestCase):
         m1 = Member(family=1)
         m2 = Member(family=1)
         m3 = Member(family=1)
-        generator = Generator([m1, m2, m3], self._basic_mock_work_day_service)
+        generator = Generator([m1, m2, m3], self._basic_mock_work_day_service, 10)
         generator.sos_days.append_member(m1)
         generator.sos_days.append_member(m2)
         self.assertTrue(generator._is_members_family_in_holy_period(m3))
@@ -71,7 +71,7 @@ class TestGenerator(TestCase):
 
         members = self._large_list_of_members
         members.extend([sponsor, sponsored])
-        generator = Generator(members, self._basic_mock_work_day_service)
+        generator = Generator(members, self._basic_mock_work_day_service, 10)
 
         generator.generate()
         sos_days = generator.sos_days
@@ -101,7 +101,7 @@ class TestGenerator(TestCase):
 
             members = self._large_list_of_members
             members.extend([sponsor, sponsored])
-            generator = Generator(members, self._basic_mock_work_day_service)
+            generator = Generator(members, self._basic_mock_work_day_service, 10)
 
             generator.generate()
             sos_days = generator.sos_days
@@ -131,7 +131,7 @@ class TestGenerator(TestCase):
 
         members = self._large_list_of_members
         members.extend([sponsor, sponsored])
-        generator = Generator(members, mock_work_days_service)
+        generator = Generator(members, mock_work_days_service, 10)
 
         generator.generate()
         sos_days = generator.sos_days
@@ -150,7 +150,7 @@ class TestGenerator(TestCase):
     def test_generator_retries_if_deadlock_occurs(self):
         m1 = Member(family=1)
         m2 = Member(family=1)
-        generator = Generator([m1, m2], self._basic_mock_work_day_service, number_of_retries=10)
+        generator = Generator([m1, m2], self._basic_mock_work_day_service, 10, number_of_retries=10)
         with self.assertRaises(NotPossibleToGenerateSosError):
             generator.generate()
         self.assertEqual(generator.number_of_retries_done, 10)
@@ -159,7 +159,7 @@ class TestGenerator(TestCase):
         m1 = Member(sos_percentage=50, family=1)
         m2 = Member(sos_percentage=50, family=2)
         m3 = Member(sos_percentage=50, family=3, end_date="2017-01-03")
-        generator = Generator([m1, m2, m3], self._basic_mock_work_day_service, holy_period_length=0)
+        generator = Generator([m1, m2, m3], self._basic_mock_work_day_service, 0)
         generator.sos_days.append_member(m1)
         generator.sos_days.append_member(m2)
         generator.sos_days.append_member(m3)
@@ -167,6 +167,6 @@ class TestGenerator(TestCase):
 
     def test_last_day_is_full(self):
         m = Member(sos_percentage=50, family=1)
-        generator = Generator([m], self._basic_mock_work_day_service, holy_period_length=0)
+        generator = Generator([m], self._basic_mock_work_day_service, 0)
         generator.generate()
         self.assertListEqual([], generator.sos_days)
