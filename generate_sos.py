@@ -11,10 +11,12 @@ from datetime import datetime
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--minNrOfDaysBetweenSos', dest='min_nr_of_days_between_sos', type=int, nargs='?', const=10, help='minimum number of days between two S.O.S for a family. Default is 10')
 parser.add_argument('--extraTo', dest='extra_to', type=int, nargs='*', help='member id of the member who shall have one extra sos')
 parser.add_argument('--lessTo', dest='less_to', type=int, nargs='*', help='member id of the member who shall have one less sos')
 args = parser.parse_args()
 
+min_nr_of_days_between_sos = args.min_nr_of_days_between_sos
 extra_to = []
 less_to = []
 if args.extra_to:
@@ -58,7 +60,10 @@ for date, day_members in last_ten_days_dict.items():
     day = Day(date, [members.get_by_id(day_members[0]), members.get_by_id(day_members[1])])
     last_ten_days.append(day)
 
-g = Generator(members=members, work_days_service=work_days_service, last_ten_days=last_ten_days)
+g = Generator(members=members,
+              work_days_service=work_days_service,
+              min_nr_of_days_between_sos=min_nr_of_days_between_sos,
+              last_ten_days=last_ten_days)
 g.generate()
 
 sos_per_family = {}

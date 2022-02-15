@@ -6,8 +6,7 @@ from .exceptions import BadDistributionBetweenDepartmentsError, DeadlockInGenera
 from .model import DayList
 from .integration.workdays import WorkDaysService
 
-DEFAULT_HOLY_PERIOD_LENGTH = 10
-DEFAULT_MAX_NUMBER_OF_RETRIES = 10000
+DEFAULT_NUMBER_OF_RETRIES = 10000 # Antalet försök i brute-forcen
 
 
 class Generator:
@@ -17,9 +16,9 @@ class Generator:
     _lowest_bad_count_sos_days = None
 
     def __init__(self, members, work_days_service: WorkDaysService,
-                 holy_period_length=DEFAULT_HOLY_PERIOD_LENGTH, number_of_retries=DEFAULT_MAX_NUMBER_OF_RETRIES,
+                 min_nr_of_days_between_sos, number_of_retries=DEFAULT_NUMBER_OF_RETRIES,
                  last_ten_days=[]):
-        self.holy_period_length = holy_period_length
+        self.min_nr_of_days_between_sos = min_nr_of_days_between_sos
         self.members = members
         self.number_of_retries_done = 0
         self.work_days_service = work_days_service
@@ -167,8 +166,8 @@ class Generator:
         complete_period = self.last_ten_days + self.sos_days
         length = len(complete_period)
         holy_period_start = \
-            0 if length < self.holy_period_length \
-                else length - self.holy_period_length
+            0 if length < self.min_nr_of_days_between_sos \
+                else length - self.min_nr_of_days_between_sos
         return complete_period[holy_period_start:]
 
     def _is_members_family_in_holy_period(self, member):
