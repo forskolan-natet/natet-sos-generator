@@ -10,7 +10,7 @@ class DAO:
         except AttributeError:
             pass
 
-        self.db = mysql.connector.connect(host="192.168.0.10", user="forskolannatet", passwd="hR%p3BLwx:Gd8vx", db="forskolannatet")
+        self.db = mysql.connector.connect(host="127.0.0.1", user="usr", passwd="pwd", db="forskolannatet")
 
     def _run(self):
         cursor = self.db.cursor()
