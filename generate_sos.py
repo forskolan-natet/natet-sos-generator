@@ -85,7 +85,7 @@ for day in g.sos_days:
 
 for family_id, sos_list in sos_per_family.items():
     family_name = members.get_family_name_by_family_id(family_id)
-    print("\n%s:" % family_name)
+    print("\n%s" % family_name)
     cal = Calendar()
     for sos in sos_list:
         print("%s\t%s\t%s" % (sos['date'], sos['department'], sos['member']))
