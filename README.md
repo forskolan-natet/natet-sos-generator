@@ -29,7 +29,7 @@ Se till att `database.py` har korrekt IP, username och password till databasen.
 
 Kör kommandot `pipenv run python generate_sos.py`
 
-VALBART: Man kan lägga på flaggorna `--extraTo a,b,c` samt `--lessTo x,y,z` där `a, b, c, x, y, z` är ID:n på medlemmar i medelemsregistret. Detta används om någon medlem ska tilldelas ett extra eller slippa ett SOS. Exemple: `pipenv run python generate_sos.py --extraTo 1,2 --lessTo 3,4`
+VALBART: Man kan lägga på flaggorna `--extraTo a b c` samt `--lessTo x y z` där `a, b, c, x, y, z` är ID:n på medlemmar i medelemsregistret. Detta används om någon medlem ska tilldelas ett extra eller slippa ett SOS. Exemple: `pipenv run python generate_sos.py --extraTo 1 2 --lessTo 3 4`
 
 När genereringen är färdig får du svara på frågan om det ska sparas i databasen eller ej:
 
