@@ -63,8 +63,9 @@ g.generate()
 
 sos_per_family = {}
 print("\n\nStäng och städ per datum")
+print("Datum;Tallen;Granen")
 for day in g.sos_days:
-    print("%s\tTallen: %s,\tGranen: %s" % (day.date, day.tallen.name, day.granen.name))
+    print("%s;%s;%s" % (day.date, day.tallen.name, day.granen.name))
     for member in day.members:
         obj = {
             'date': day.date,
