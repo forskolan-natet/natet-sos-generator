@@ -12,7 +12,7 @@ class TestGenerator(TestCase):
     @property
     def _basic_mock_work_day_service(self):
         return MockWorkDaysService(start_after_date="2017-01-02",
-                                   closed_days_dao=MockClosedDaysDAO(),
+                                   closed_days_dao=MockClosedDaysDAO(""),
                                    dryg_dao=MockDrygDAO())
 
     @property

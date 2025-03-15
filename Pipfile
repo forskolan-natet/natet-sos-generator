@@ -6,15 +6,16 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-appdirs = "==1.4.3"
-icalendar = "==4.0.3"
-pyparsing = "==2.2.0"
-requests = "==2.20.0"
-six = "==1.10.0"
-mysql-connector-python = "*"
+appdirs = "==1.4.4"
+pyparsing = "==3.2.1"
+requests = "==2.32.3"
+six = "==1.17.0"
+xlrd = "==2.0.1"
+pandas = "==2.2.3"
+openpyxl = "==3.1.2"
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
 
 [scripts]
 test = "python -m unittest discover test"

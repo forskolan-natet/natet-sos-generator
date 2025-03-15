@@ -9,7 +9,7 @@ class TestDayList(TestCase):
 
     def test_append_member_when_list_is_empty(self):
         dl = DayList(work_days_service=MockWorkDaysService(start_after_date="2017-01-02",
-                                                           closed_days_dao=MockClosedDaysDAO(),
+                                                           closed_days_dao=MockClosedDaysDAO(""),
                                                            dryg_dao=MockDrygDAO()))
         m = Member(first_name="Kalle", last_name="Kula")
         dl.append_member(m)

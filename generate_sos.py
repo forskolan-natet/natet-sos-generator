@@ -1,77 +1,61 @@
 # encoding: utf-8
 
-from generator.integration.database import MembersDAO, ClosedDaysDAO, SchedulePlanningDAO, ScheduleLiveDAO
 from generator.generator import Generator
 from generator.integration.workdays import WorkDaysService
 from generator.integration.dryg import DrygDAO
 from generator.model import Day, DayList, MemberList
-from generator.constants import TALLEN_ID, GRANEN_ID
-from icalendar import Calendar, Event
-from datetime import datetime
-import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--minNrOfDaysBetweenSos', dest='min_nr_of_days_between_sos', type=int, nargs='?', const=10, help='minimum number of days between two S.O.S for a family. Default is 10')
-parser.add_argument('--extraTo', dest='extra_to', type=int, nargs='*', help='member id of the member who shall have one extra sos')
-parser.add_argument('--lessTo', dest='less_to', type=int, nargs='*', help='member id of the member who shall have one less sos')
-args = parser.parse_args()
+from generator.properties import Properties
+from generator.previous_schema import PreviousSchema
+from generator.closed_days import ClosedDays
+from generator.members import MembersExcel
 
-min_nr_of_days_between_sos = args.min_nr_of_days_between_sos
-extra_to = []
-less_to = []
-if args.extra_to:
-    print("Extra SOS to %s\n" % args.extra_to)
-    extra_to = args.extra_to
-if args.less_to:
-    print("Less SOS to %s\n" % args.less_to)
-    less_to = args.less_to
+# Parse properties file
+properties = Properties("properties.conf")
 
+# Read previous schema
+previous_schedule = PreviousSchema.parse(properties.previous_schema)
+last_scheduled_date = previous_schedule[-1].date.strftime('%Y-%m-%d')
 
-def store_sos(sos_days):
-    schedule_planning_dao = SchedulePlanningDAO()
-    for day in sos_days:
-        schedule_planning_dao.add_sos(day.date, TALLEN_ID, day.tallen.id)
-        schedule_planning_dao.add_sos(day.date, GRANEN_ID, day.granen.id)
-
-
-members_dicts = MembersDAO().get_members_for_sos_generator()
+members_dicts = MembersExcel.read_member_dict(properties.members_path)
 members = MemberList.create_from_dicts(members_dicts)
 
-schedule_live_dao = ScheduleLiveDAO()
-start_after_date = schedule_live_dao.get_last_scheduled_date()
-print("Start at date %s\n" % start_after_date)
-work_days_service = WorkDaysService(start_after_date=start_after_date,
-                                    closed_days_dao=ClosedDaysDAO(),
+print("Start at date %s\n" % last_scheduled_date)
+work_days_service = WorkDaysService(start_after_date=last_scheduled_date,
+                                    closed_days_dao=ClosedDays(properties.closed_days_path),
                                     dryg_dao=DrygDAO())
 
 
-for id in extra_to:
-    member = members.get_by_id(id)
+for member_id in properties.extra_sos_to:
+    member = members.get_by_id(member_id)
     member.sos_percentage += 50
     print("Extra SOS to %s. New SOS percentage is %s\n" % (member.name, member.sos_percentage))
 
-for id in less_to:
-    member = members.get_by_id(id)
+for member_id in properties.less_sos_to:
+    member = members.get_by_id(member_id)
     member.sos_percentage -= 50
     print("Less SOS to %s. New SOS percentage is %s\n" % (member.name, member.sos_percentage))
 
-last_ten_days_dict = schedule_live_dao.get_last_ten_sos_days()
 last_ten_days = DayList(work_days_service=None)
-for date, day_members in last_ten_days_dict.items():
-    day = Day(date, [members.get_by_id(day_members[0]), members.get_by_id(day_members[1])])
+for scheduled_day in previous_schedule[-10:]:
+    date = scheduled_day.date.strftime('%Y-%m-%d')
+    day = Day(date, [members.get_by_id(scheduled_day.tallen_cleaner), members.get_by_id(scheduled_day.granen_cleaner)])
     last_ten_days.append(day)
 
 g = Generator(members=members,
               work_days_service=work_days_service,
-              min_nr_of_days_between_sos=min_nr_of_days_between_sos,
+              min_nr_of_days_between_sos=properties.min_nr_of_days_between_sos,
               last_ten_days=last_ten_days)
 g.generate()
 
 sos_per_family = {}
+sos_per_date_file = open("schedules/SoS per date.csv", "w")
 print("\n\nStäng och städ per datum")
 print("Datum;Tallen;Granen")
+sos_per_date_file.write("Datum;Tallen;Granen\n")
 for day in g.sos_days:
     print("%s;%s;%s" % (day.date, day.tallen.name, day.granen.name))
+    sos_per_date_file.write("%s;%s;%s\n" % (day.date, day.tallen.name, day.granen.name))
     for member in day.members:
         obj = {
             'date': day.date,
@@ -82,28 +66,26 @@ for day in g.sos_days:
             sos_per_family[member.family].append(obj)
         else:
             sos_per_family[member.family] = [obj]
+sos_per_date_file.close()
 
+family_schedule_name = "Family schedule " + g.sos_days[0].date + " - " + g.sos_days[-1].date + ".txt"
+sos_per_family_file = open(family_schedule_name, "w")
 for family_id, sos_list in sos_per_family.items():
     family_name = members.get_family_name_by_family_id(family_id)
     print("\n%s" % family_name)
-    cal = Calendar()
+    sos_per_family_file.write(family_name + "\n")
     for sos in sos_list:
         print("%s\t%s\t%s" % (sos['date'], sos['department'], sos['member']))
-        event = Event()
+        sos_per_family_file.write("%s\t%s\t%s\n" % (sos['date'], sos['department'], sos['member']))
+    sos_per_family_file.write("\n")
+sos_per_family_file.close()
 
-        event.add('summary', 'Stäng och städ på %s' % sos['department'])
-        date_parts = sos['date'].split('-')
-        event.add('dtstart', datetime(int(date_parts[0]), int(date_parts[1]), int(date_parts[2]), 15, 0, 0))
-        event.add('dtend', datetime(int(date_parts[0]), int(date_parts[1]), int(date_parts[2]), 18, 0, 0))
-        cal.add_component(event)
-    f = open('%s.ics' % family_name, 'wb')
-    f.write(cal.to_ical())
-    f.close()
+def store_sos_schedule(sos_days):
+    schedule_name = "Schedule " + sos_days[0].date + " - " + sos_days[-1].date + ".csv"
+    schedule_file = open(schedule_name, "w")
+    schedule_file.write("Datum;Tallen;Granen\n")
+    for sos_day in sos_days:
+        schedule_file.write(sos_day.date + ";" + str(sos_day.tallen.id) + ";" + str(sos_day.granen.id) + "\n")
+    schedule_file.close()
 
-print("\n\nShall we store in database? (y/n)")
-choice = input().lower()
-if choice == 'y':
-    print("Fuck yeah!")
-    store_sos(g.sos_days)
-else:
-    print("Hell no!")
+store_sos_schedule(g.sos_days)

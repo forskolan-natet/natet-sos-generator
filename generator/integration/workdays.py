@@ -8,7 +8,8 @@ class WorkDaysService:
         index_of_start_after_date = self.work_days.index(start_after_date)
         self.work_days.extend(dryg_dao.get_days_for_year(int(start_year) + 1))
         self.work_days = self.work_days[index_of_start_after_date + 1:]
-        for closed_day in closed_days_dao.get_closed_days():
+        closed_days = closed_days_dao.parse_closed_days()
+        for closed_day in closed_days:
             if closed_day in self.work_days:
                 self.work_days.remove(closed_day)
 
