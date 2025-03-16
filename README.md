@@ -10,7 +10,7 @@ Ställa dig med en terminal i repo-rooten.
 
 Sätt upp en pipenv enligt följande:
 
-1. `pipenv --python 3.10`
+1. `pipenv --python 3.13`
 1. `pipenv install -d` för att installera beroenden
 1. `pipenv run test` för att köra testerna. Dessa ska alltid gå grönt i ett repo utan ocommitade ändringar
 
