@@ -28,10 +28,10 @@ Sätt upp en pipenv enligt följande:
 
 1. Du har fått tre genererade filer.
 
-   1. Schemat per dag skriver du ut och sätter upp på torkskåpen på avdelnignarna.
+   1. SoS per datum YYYY-MM-DD - YYYY-MM-DD.csv skriver du ut och sätter upp på torkskåpen på avdelnignarna.
 
-   1. Schemat per familj klistrar du in i det mail som skickas till medelmmarna.
+   1. SoS per familj YYYY-MM-DD - YYYY-MM-DD.txt klistrar du in i det mail som skickas till medelmmarna.
 
-   1. Schemat per dag med datum och ID istället för namn sparar du till nästa generering.
+   1. SoS schema YYYY-MM-DD - YYYY-MM-DD.csv sparar du till nästa generering.
 
 1. Skicka mailet! Klart!

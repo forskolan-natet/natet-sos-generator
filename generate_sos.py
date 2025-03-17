@@ -1,31 +1,30 @@
 # encoding: utf-8
 
 from generator.generator import Generator
-from generator.integration.workdays import WorkDaysService
-from generator.integration.dryg import DrygDAO
-from generator.model import Day, DayList, MemberList
-
 from generator.properties import Properties
 from generator.previous_schema import PreviousSchema
 from generator.closed_days import ClosedDays
-from generator.members import MembersExcel
+from generator.model import Day, DayList, MemberList
 
+from generator.integration.excel import MembersExcel
+from generator.integration.workdays import WorkDaysService
+from generator.integration.dryg import DrygDAO
+
+#############################
 # Parse properties file
+#############################
 properties = Properties("properties.conf")
 
+#############################
 # Read previous schema
-previous_schedule = PreviousSchema.parse(properties.previous_schema)
-last_scheduled_date = previous_schedule[-1].date.strftime('%Y-%m-%d')
+#############################
+previous_schema = PreviousSchema(properties.previous_schema)
 
-members_dicts = MembersExcel.read_member_dict(properties.members_path)
+#############################
+# Read members
+#############################
+members_dicts = MembersExcel.read_members_as_dict(properties.members_path)
 members = MemberList.create_from_dicts(members_dicts)
-
-print("Start at date %s\n" % last_scheduled_date)
-work_days_service = WorkDaysService(start_after_date=last_scheduled_date,
-                                    closed_days_dao=ClosedDays(properties.closed_days_path),
-                                    dryg_dao=DrygDAO())
-
-
 for member_id in properties.extra_sos_to:
     member = members.get_by_id(member_id)
     member.sos_percentage += 50
@@ -36,8 +35,17 @@ for member_id in properties.less_sos_to:
     member.sos_percentage -= 50
     print("Less SOS to %s. New SOS percentage is %s\n" % (member.name, member.sos_percentage))
 
+#############################
+# Prepare work days and generate schedule
+#############################
+last_scheduled_date = previous_schema.days[-1].date.strftime('%Y-%m-%d')
+print("Start at date %s\n" % last_scheduled_date)
+work_days_service = WorkDaysService(start_after_date=last_scheduled_date,
+                                    closed_days_dao=ClosedDays(properties.closed_days_path),
+                                    dryg_dao=DrygDAO())
+
 last_ten_days = DayList(work_days_service=None)
-for scheduled_day in previous_schedule[-10:]:
+for scheduled_day in previous_schema.days[-10:]:
     date = scheduled_day.date.strftime('%Y-%m-%d')
     day = Day(date, [members.get_by_id(scheduled_day.tallen_cleaner), members.get_by_id(scheduled_day.granen_cleaner)])
     last_ten_days.append(day)
@@ -48,13 +56,18 @@ g = Generator(members=members,
               last_ten_days=last_ten_days)
 g.generate()
 
+#############################
+# Store the result in three files
+# SoS per datum YYYY-MM-DD - YYYY-MM-DD.csv
+# SoS per familj YYYY-MM-DD - YYYY-MM-DD.txt
+# SoS schema YYYY-MM-DD - YYYY-MM-DD.csv
+#############################
+date_range = g.sos_days[0].date + " - " + g.sos_days[-1].date
+
 sos_per_family = {}
-sos_per_date_file = open("schedules/SoS per date.csv", "w")
-print("\n\nStäng och städ per datum")
-print("Datum;Tallen;Granen")
+sos_per_date_file = open("SoS per datum " + date_range + ".csv", "w")
 sos_per_date_file.write("Datum;Tallen;Granen\n")
 for day in g.sos_days:
-    print("%s;%s;%s" % (day.date, day.tallen.name, day.granen.name))
     sos_per_date_file.write("%s;%s;%s\n" % (day.date, day.tallen.name, day.granen.name))
     for member in day.members:
         obj = {
@@ -68,7 +81,7 @@ for day in g.sos_days:
             sos_per_family[member.family] = [obj]
 sos_per_date_file.close()
 
-family_schedule_name = "Family schedule " + g.sos_days[0].date + " - " + g.sos_days[-1].date + ".txt"
+family_schedule_name = "SoS per familj " + date_range + ".txt"
 sos_per_family_file = open(family_schedule_name, "w")
 for family_id, sos_list in sos_per_family.items():
     family_name = members.get_family_name_by_family_id(family_id)
@@ -80,12 +93,9 @@ for family_id, sos_list in sos_per_family.items():
     sos_per_family_file.write("\n")
 sos_per_family_file.close()
 
-def store_sos_schedule(sos_days):
-    schedule_name = "Schedule " + sos_days[0].date + " - " + sos_days[-1].date + ".csv"
-    schedule_file = open(schedule_name, "w")
-    schedule_file.write("Datum;Tallen;Granen\n")
-    for sos_day in sos_days:
-        schedule_file.write(sos_day.date + ";" + str(sos_day.tallen.id) + ";" + str(sos_day.granen.id) + "\n")
-    schedule_file.close()
-
-store_sos_schedule(g.sos_days)
+schedule_name = "SoS schema " + date_range + ".csv"
+schedule_file = open(schedule_name, "w")
+schedule_file.write("Datum;Tallen;Granen\n")
+for sos_day in g.sos_days:
+    schedule_file.write(sos_day.date + ";" + str(sos_day.tallen.id) + ";" + str(sos_day.granen.id) + "\n")
+schedule_file.close()

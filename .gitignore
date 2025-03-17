@@ -91,3 +91,7 @@ ENV/
 .ropeproject
 sql
 .idea
+
+# Generated schema files
+SoS*.csv
+SoS*.txt
